@@ -1,0 +1,16 @@
+backend\BackendApplication.class
+backend\model\TicketPriority.class
+backend\exception\TicketNotFoundAdvice.class
+backend\repository\CommentRepository.class
+backend\model\CommentModel.class
+backend\model\AttachmentModel.class
+backend\model\TicketModel.class
+backend\repository\AttachmentRepository.class
+backend\exception\TicketNotFoundException.class
+backend\controller\TicketController.class
+backend\exception\CommentNotFoundException.class
+backend\exception\AttachmentNotFoundException.class
+backend\repository\TicketRepository.class
+backend\exception\AttachmentNotFoundAdvice.class
+backend\model\TicketStatus.class
+backend\exception\CommentNotFoundAdvice.class
