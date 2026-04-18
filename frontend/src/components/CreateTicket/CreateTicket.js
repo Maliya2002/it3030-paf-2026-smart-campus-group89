@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import TicketService from '../../services/TicketService';
 import '../styles/CreateTicket.css';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { getCurrentUser } from '../../utils/auth';
 
 function CreateTicket() {
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -16,7 +18,7 @@ function CreateTicket() {
     priority: 'MEDIUM',
     category: '',
     location: '',
-    reportedBy: ''
+    reportedBy: currentUser?.email || ''
   });
 
   const handleInputChange = (e) => {
@@ -68,7 +70,7 @@ function CreateTicket() {
   return (
     <div className="create-ticket-container">
       <div className="create-ticket-header">
-        <button className="back-btn" onClick={() => navigate('/')}>
+        <button className="back-btn" onClick={() => navigate('/home')}>
           <ArrowLeft size={20} /> Back
         </button>
         <h1>Create New Ticket</h1>
@@ -183,7 +185,7 @@ function CreateTicket() {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/home')}>
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={loading}>

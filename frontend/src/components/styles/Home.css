@@ -65,7 +65,9 @@
 }
 
 .nav-item,
-.nav-cta {
+.nav-cta,
+.nav-signout,
+.nav-user {
   text-decoration: none;
   border-radius: 999px;
   padding: 10px 16px;
@@ -84,8 +86,21 @@
   box-shadow: 0 12px 24px rgba(209, 73, 91, 0.2);
 }
 
+.nav-user {
+  color: #12343b;
+  background: rgba(42, 157, 143, 0.12);
+}
+
+.nav-signout {
+  border: 1px solid rgba(20, 33, 61, 0.12);
+  background: #fff;
+  color: #14213d;
+  cursor: pointer;
+}
+
 .nav-item:hover,
 .nav-cta:hover,
+.nav-signout:hover,
 .primary-action:hover,
 .secondary-action:hover,
 .module-link:hover {

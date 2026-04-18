@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
   BellRing,
@@ -11,6 +11,7 @@ import {
   Building2
 } from 'lucide-react';
 import '../styles/Home.css';
+import { getCurrentUser, signOutUser } from '../../utils/auth';
 
 const modules = [
   {
@@ -82,6 +83,14 @@ const journeySteps = [
 ];
 
 function Home() {
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+
+  const handleSignOut = () => {
+    signOutUser();
+    navigate('/', { replace: true });
+  };
+
   return (
     <div className="campus-home">
       <header className="campus-hero">
@@ -99,7 +108,11 @@ function Home() {
           <div className="campus-nav-links">
             <a href="#modules" className="nav-item">Modules</a>
             <a href="#flow" className="nav-item">Flow</a>
+            {currentUser && <span className="nav-user">{currentUser.fullName}</span>}
             <Link to="/alltickets" className="nav-cta">Open Ticketing</Link>
+            <button type="button" className="nav-signout" onClick={handleSignOut}>
+              Sign Out
+            </button>
           </div>
         </nav>
 

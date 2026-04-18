@@ -1,14 +1,19 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import App from './App';
+import { getCurrentUser, registerUser, signInUser, signOutUser } from './utils/auth';
 
-test('renders smart campus homepage', () => {
-  render(
-    <MemoryRouter>
-      <App />
-    </MemoryRouter>
-  );
+test('registers and signs in a user with local auth storage', () => {
+  window.localStorage.clear();
 
-  expect(screen.getByText(/Campus Services Home/i)).toBeInTheDocument();
-  expect(screen.getByText(/Maintenance & Incident Ticketing/i)).toBeInTheDocument();
+  registerUser({
+    fullName: 'Test User',
+    email: 'test@example.com',
+    password: 'secret123'
+  });
+
+  signOutUser();
+  signInUser('test@example.com', 'secret123');
+
+  expect(getCurrentUser()).toMatchObject({
+    fullName: 'Test User',
+    email: 'test@example.com'
+  });
 });

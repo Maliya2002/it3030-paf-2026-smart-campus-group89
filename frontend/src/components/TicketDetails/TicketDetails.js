@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TicketService from '../../services/TicketService';
 import '../styles/TicketDetails.css';
-import { ArrowLeft, AlertCircle, Loader, Trash2, Edit2, Download } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Loader, Trash2 } from 'lucide-react';
+import { getCurrentUser } from '../../utils/auth';
 
 function TicketDetails() {
   const { id } = useParams();
@@ -12,10 +13,10 @@ function TicketDetails() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [activeTab, setActiveTab] = useState('details');
-  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     fetchTicketDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchTicketDetails = async () => {
@@ -38,17 +39,6 @@ function TicketDetails() {
       fetchTicketDetails();
     } catch (err) {
       setError('Failed to update status');
-    }
-  };
-
-  const handleAssignTechnician = async (technician) => {
-    try {
-      const updatedData = { ...ticket, assignedTechnician: technician };
-      await TicketService.updateTicket(id, updatedData);
-      setSuccessMessage('Technician assigned successfully!');
-      fetchTicketDetails();
-    } catch (err) {
-      setError('Failed to assign technician');
     }
   };
 
@@ -272,8 +262,9 @@ function TicketDetails() {
 }
 
 function CommentsSection({ ticketId, comments, onUpdate }) {
+  const currentUser = getCurrentUser();
   const [commentText, setCommentText] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(currentUser?.email || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -360,8 +351,9 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
 }
 
 function AttachmentsSection({ ticketId, attachments, onUpdate }) {
+  const currentUser = getCurrentUser();
   const [files, setFiles] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(currentUser?.email || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
