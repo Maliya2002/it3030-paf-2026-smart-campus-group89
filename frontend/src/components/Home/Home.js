@@ -16,9 +16,8 @@ function Home() {
           <Link to="/alltickets" className="nav-link">All Tickets</Link>
           <Link to="/createticket" className="nav-link">Create Ticket</Link>
           
-          
           <Link to="/resources" className="nav-link">Resources</Link>
-          <Link to="/create-resource" className="nav-link">Add Resource</Link>
+          <Link to="/create-resource" className="nav-link">Create Resource</Link>
         </div>
       </nav>
 
