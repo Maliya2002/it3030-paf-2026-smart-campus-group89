@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Ticket, AlertCircle } from 'lucide-react';
 import '../styles/Home.css';
 
+
 function Home() {
   return (
     <div className="home-container">
@@ -14,6 +15,10 @@ function Home() {
         <div className="navbar-links">
           <Link to="/alltickets" className="nav-link">All Tickets</Link>
           <Link to="/createticket" className="nav-link">Create Ticket</Link>
+          
+          
+          <Link to="/resources" className="nav-link">Resources</Link>
+          <Link to="/create-resource" className="nav-link">Add Resource</Link>
         </div>
       </nav>
 
@@ -42,6 +47,24 @@ function Home() {
             <p>Track all tickets with advanced filtering options</p>
             <Link to="/alltickets" className="feature-btn">
               View Tickets
+            </Link>
+          </div>
+        
+          <div className="feature-card">
+            <div className="feature-icon">🏢</div>
+            <h3>Manage Resources</h3>
+            <p>View and search rooms, labs, and equipment</p>
+            <Link to="/resources" className="feature-btn">
+              View Resources
+            </Link>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">➕</div>
+            <h3>Add Resource</h3>
+            <p>Create new rooms, labs, or equipment entries</p>
+            <Link to="/create-resource" className="feature-btn">
+              Add Now
             </Link>
           </div>
 

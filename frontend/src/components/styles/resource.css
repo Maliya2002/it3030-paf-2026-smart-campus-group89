@@ -1,0 +1,51 @@
+body {
+  background: linear-gradient(135deg, #5f6ad4, #7b3dbb);
+  font-family: "Segoe UI";
+}
+
+.container {
+  padding: 20px;
+  color: white;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+}
+
+.btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #7f5af0, #a78bfa);
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.card {
+  margin-top: 20px;
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+
+.active {
+  color: green;
+}
+
+.inactive {
+  color: red;
+}
