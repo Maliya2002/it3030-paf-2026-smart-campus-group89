@@ -13,31 +13,79 @@ function CreateResource() {
     capacity: ""
   });
 
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let err = {};
+
+    if (!data.name.trim()) {
+      err.name = "Name is required";
+    }
+
+    if (!data.type.trim()) {
+      err.type = "Type is required";
+    }
+
+    if (!data.location.trim()) {
+      err.location = "Location is required";
+    }
+
+    if (!data.capacity) {
+      err.capacity = "Capacity is required";
+    } else if (data.capacity <= 0) {
+      err.capacity = "Capacity must be greater than 0";
+    }
+
+    setErrors(err);
+    return Object.keys(err).length === 0;
+  };
+
   const submit = (e) => {
     e.preventDefault();
 
+    if (!validate()) return;
+
     createResource(data)
       .then(() => {
-        alert("Created!");
+        alert("Resource Created!");
         navigate("/resources");
-      });
+      })
+      .catch(() => alert("Error creating resource"));
   };
 
   return (
     <form onSubmit={submit} className="card form">
+
       <h2>Create Resource</h2>
 
-      <input placeholder="Name"
-        onChange={(e)=>setData({...data,name:e.target.value})} />
+      {/* NAME */}
+      <input
+        placeholder="Name"
+        onChange={(e)=>setData({...data,name:e.target.value})}
+      />
+      {errors.name && <p className="error">{errors.name}</p>}
 
-      <input placeholder="Type"
-        onChange={(e)=>setData({...data,type:e.target.value})} />
+      {/* TYPE */}
+      <input
+        placeholder="Type (ROOM / LAB / EQUIPMENT)"
+        onChange={(e)=>setData({...data,type:e.target.value})}
+      />
+      {errors.type && <p className="error">{errors.type}</p>}
 
-      <input placeholder="Location"
-        onChange={(e)=>setData({...data,location:e.target.value})} />
+      {/* LOCATION */}
+      <input
+        placeholder="Location"
+        onChange={(e)=>setData({...data,location:e.target.value})}
+      />
+      {errors.location && <p className="error">{errors.location}</p>}
 
-      <input placeholder="Capacity"
-        onChange={(e)=>setData({...data,capacity:e.target.value})} />
+      {/* CAPACITY */}
+      <input
+        type="number"
+        placeholder="Capacity"
+        onChange={(e)=>setData({...data,capacity:e.target.value})}
+      />
+      {errors.capacity && <p className="error">{errors.capacity}</p>}
 
       <button className="btn">Create</button>
     </form>

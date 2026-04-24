@@ -1,5 +1,6 @@
 package backend.controller;
 
+import jakarta.validation.Valid;
 import backend.model.Resource;
 import backend.repository.ResourceRepository;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class ResourceController {
 
     // CREATE
     @PostMapping
-    public Resource create(@RequestBody Resource r) {
+    public Resource create(@Valid@RequestBody Resource r) {
         r.setStatus("ACTIVE");
         return repo.save(r);
     }
