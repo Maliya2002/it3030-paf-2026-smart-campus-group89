@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
-    List<Resource> findByTypeContainingAndLocationContaining(
-        String type, String location
+    List<Resource> findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
+            String type, String location
     );
 }

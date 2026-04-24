@@ -1,51 +1,65 @@
 import React, { useEffect, useState } from "react";
-import { getResources } from "../../services/ResourceService";
+import { getResources, deleteResource } from "../../services/ResourceService";
+import { Link } from "react-router-dom";
 import "../styles/resource.css";
 
 function ResourceList() {
 
-  const [resources, setResources] = useState([]);
+  const [data, setData] = useState([]);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
 
   useEffect(() => {
-    fetchData();
+    load();
   }, []);
 
-  const fetchData = () => {
+  const load = () => {
     getResources(type, location)
-      .then(res => setResources(res.data))
-      .catch(() => alert("Failed to load resources"));
+      .then(res => setData(res.data))
+      .catch(() => alert("Error loading"));
+  };
+
+  const remove = (id) => {
+    deleteResource(id).then(load);
   };
 
   return (
     <div className="container">
 
-      <h2 className="title">All Resources</h2>
+      <h2 className="title">Resources</h2>
 
       <div className="search-box">
-        <input placeholder="Search by type/location..."
-          onChange={(e) => setType(e.target.value)} />
+        <input placeholder="Type"
+          onChange={(e)=>setType(e.target.value)} />
+
+        <input placeholder="Location"
+          onChange={(e)=>setLocation(e.target.value)} />
+
+        <button className="btn" onClick={load}>Search</button>
       </div>
 
-      <button className="btn" onClick={fetchData}>
-        Search
-      </button>
+      <Link to="/create-resource">
+        <button className="btn add">+ Add Resource</button>
+      </Link>
 
-      <div className="card">
-        {resources.length === 0 ? (
-          <p>No resources found</p>
-        ) : (
-          resources.map(r => (
-            <div key={r.id} className="item">
-              <h4>{r.name}</h4>
-              <p>{r.type} | {r.location}</p>
-              <span className={r.status === "ACTIVE" ? "active" : "inactive"}>
-                {r.status}
-              </span>
+      <div className="grid">
+        {data.map(r => (
+          <div className="card" key={r.id}>
+            <h3>{r.name}</h3>
+            <p>{r.type} | {r.location}</p>
+            <p>Capacity: {r.capacity}</p>
+
+            <div className="actions">
+              <Link to={`/edit-resource/${r.id}`}>
+                <button className="edit">Edit</button>
+              </Link>
+
+              <button className="delete" onClick={()=>remove(r.id)}>
+                Delete
+              </button>
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
 
     </div>

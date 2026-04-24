@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { createResource } from "../../services/ResourceService";
+import { useNavigate } from "react-router-dom";
 
 function CreateResource() {
+
+  const navigate = useNavigate();
 
   const [data, setData] = useState({
     name: "",
@@ -10,25 +13,33 @@ function CreateResource() {
     capacity: ""
   });
 
-  const handleSubmit = (e) => {
+  const submit = (e) => {
     e.preventDefault();
+
     createResource(data)
-      .then(() => alert("Created"))
-      .catch(() => alert("Error"));
+      .then(() => {
+        alert("Created!");
+        navigate("/resources");
+      });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={submit} className="card form">
+      <h2>Create Resource</h2>
+
       <input placeholder="Name"
         onChange={(e)=>setData({...data,name:e.target.value})} />
+
       <input placeholder="Type"
         onChange={(e)=>setData({...data,type:e.target.value})} />
+
       <input placeholder="Location"
         onChange={(e)=>setData({...data,location:e.target.value})} />
+
       <input placeholder="Capacity"
         onChange={(e)=>setData({...data,capacity:e.target.value})} />
 
-      <button>Create Resource</button>
+      <button className="btn">Create</button>
     </form>
   );
 }

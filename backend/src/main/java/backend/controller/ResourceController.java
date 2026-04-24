@@ -1,64 +1,72 @@
 package backend.controller;
 
 import backend.model.Resource;
-import backend.service.ResourceService;
-
-import org.springframework.http.ResponseEntity;
+import backend.repository.ResourceRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/resources")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class ResourceController {
 
-    private final ResourceService service;
+    private final ResourceRepository repo;
 
-    public ResourceController(ResourceService service) {
-        this.service = service;
+    public ResourceController(ResourceRepository repo) {
+        this.repo = repo;
     }
 
-    // GET all
+    // GET ALL + FILTER
     @GetMapping
-    public ResponseEntity<List<Resource>> getAll(
-        @RequestParam(required = false) String type,
-        @RequestParam(required = false) String location
+    public List<Resource> getAll(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String location
     ) {
-        return ResponseEntity.ok(service.getAll(type, location));
+        if (type == null && location == null) {
+            return repo.findAll();
+        }
+        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
+                type == null ? "" : type,
+                location == null ? "" : location
+        );
     }
 
-    // GET by id
+    // GET ONE
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+    public Resource getOne(@PathVariable Long id) {
+        return repo.findById(id).orElseThrow();
     }
 
     // CREATE
     @PostMapping
-    public ResponseEntity<Resource> create(@RequestBody Resource resource) {
-        return ResponseEntity.ok(service.create(resource));
+    public Resource create(@RequestBody Resource r) {
+        r.setStatus("ACTIVE");
+        return repo.save(r);
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Resource> update(
-        @PathVariable Long id,
-        @RequestBody Resource resource
-    ) {
-        return ResponseEntity.ok(service.update(id, resource));
+    public Resource update(@PathVariable Long id, @RequestBody Resource r) {
+        Resource existing = repo.findById(id).orElseThrow();
+        existing.setName(r.getName());
+        existing.setType(r.getType());
+        existing.setLocation(r.getLocation());
+        existing.setCapacity(r.getCapacity());
+        return repo.save(existing);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public void delete(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 
-    // PATCH status
+    // TOGGLE STATUS
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Resource> toggleStatus(@PathVariable Long id) {
-        return ResponseEntity.ok(service.toggleStatus(id));
+    public Resource toggle(@PathVariable Long id) {
+        Resource r = repo.findById(id).orElseThrow();
+        r.setStatus(r.getStatus().equals("ACTIVE") ? "OUT_OF_SERVICE" : "ACTIVE");
+        return repo.save(r);
     }
 }
