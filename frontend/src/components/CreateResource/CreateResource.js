@@ -67,7 +67,7 @@ function CreateResource() {
 
       {/* TYPE */}
       <input
-        placeholder="Type (ROOM / LAB / EQUIPMENT)"
+        placeholder="Type (Room / Lab / Equipment)"
         onChange={(e)=>setData({...data,type:e.target.value})}
       />
       {errors.type && <p className="error">{errors.type}</p>}

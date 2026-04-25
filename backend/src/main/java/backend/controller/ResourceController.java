@@ -24,14 +24,16 @@ public class ResourceController {
     @GetMapping
     public List<Resource> getAll(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String location
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String status
     ) {
         if (type == null && location == null) {
             return repo.findAll();
         }
         return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
                 type == null ? "" : type,
-                location == null ? "" : location
+                location == null ? "" : location,
+                status == null ? "" : status
         );
     }
     //PDF

@@ -4,9 +4,9 @@ import axios from "axios";
 const API = "http://localhost:8080/api/resources";
 
 // 🔹 GET all resources (with optional filters)
-export const getResources = (type = "", location = "") => {
-  return axios.get(API, {
-    params: { type, location }
+export const getResources = (type, location, status) => {
+  return axios.get("http://localhost:8080/api/resources", {
+    params: { type, location, status }
   });
 };
 

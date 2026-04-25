@@ -7,6 +7,6 @@ import java.util.List;
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
     List<Resource> findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
-            String type, String location
+            String type, String location, String status
     );
 }

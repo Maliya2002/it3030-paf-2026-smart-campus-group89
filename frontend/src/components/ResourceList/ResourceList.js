@@ -2,29 +2,44 @@ import React, { useEffect, useState } from "react";
 import { getResources, deleteResource, downloadPDF } from "../../services/ResourceService";
 import { Link } from "react-router-dom";
 import "../styles/resource.css";
+import { Pencil, Trash2, FileDown } from "lucide-react";
 
 function ResourceList() {
 
   const [data, setData] = useState([]);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
+  const [status, setStatus] = useState("");
 
+  // 🔹 Load when filters change
   useEffect(() => {
     load();
-  }, []);
+  }, [type, location, status]);
 
-  // 🔹 Load resources (with filters)
+  // 🔹 Load resources
   const load = () => {
-    getResources(type, location)
+    getResources(type, location, status)
       .then(res => setData(res.data))
       .catch(() => alert("Error loading resources"));
   };
 
-  // 🔹 Delete resource
+  // 🔹 Delete
   const remove = (id) => {
     if (window.confirm("Are you sure you want to delete this resource?")) {
-      deleteResource(id).then(load);
+      deleteResource(id)
+        .then(() => {
+          alert("Deleted successfully!");
+          load();
+        })
+        .catch(() => alert("Delete failed"));
     }
+  };
+
+  // 🔹 Reset filters
+  const resetFilters = () => {
+    setType("");
+    setLocation("");
+    setStatus("");
   };
 
   // 🔹 Download PDF
@@ -48,34 +63,49 @@ function ResourceList() {
 
       <h2 className="title">Resources</h2>
 
-      {/* 🔍 SEARCH SECTION */}
+      {/* 🔍 FILTER SECTION */}
       <div className="search-box">
 
-        <input
-          placeholder="Type (ROOM / LAB / EQUIPMENT)"
-          onChange={(e) => setType(e.target.value)}
-        />
+        {/* TYPE FILTER */}
+        <select value={type} onChange={(e) => setType(e.target.value)}>
+          <option value="">All Types</option>
+          <option value="ROOM">Room</option>
+          <option value="LAB">Lab</option>
+          <option value="EQUIPMENT">Equipment</option>
+        </select>
 
+        {/* LOCATION FILTER */}
         <input
           placeholder="Location"
+          value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
 
-        <button className="btn" onClick={load}>
-          Search
+        {/* STATUS FILTER */}
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="">All Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="OUT_OF_SERVICE">Out of service</option>
+        </select>
+
+        {/* RESET BUTTON */}
+        <button className="btn" onClick={resetFilters}>
+          Reset
         </button>
 
       </div>
 
       {/* 🔹 ACTION BUTTONS */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div className="top-actions">
 
         <Link to="/create-resource">
-          <button className="btn add">+ Add Resource</button>
+          <button className="btn add">
+            + Add Resource
+          </button>
         </Link>
 
-        <button className="btn" onClick={handleDownload}>
-          Download PDF
+        <button className="btn pdf-btn" onClick={handleDownload}>
+          <FileDown size={18} /> Download PDF
         </button>
 
       </div>
@@ -83,27 +113,40 @@ function ResourceList() {
       {/* 🔹 RESOURCE GRID */}
       <div className="grid">
         {data.length === 0 ? (
-          <p style={{ color: "white" }}>No resources found</p>
+          <p className="no-data">No resources found</p>
         ) : (
           data.map(r => (
             <div className="card" key={r.id}>
+
               <h3>{r.name}</h3>
+
               <p><b>Type:</b> {r.type}</p>
               <p><b>Location:</b> {r.location}</p>
               <p><b>Capacity:</b> {r.capacity}</p>
 
+              {/* 🔹 STATUS */}
+              <span className={`status ${r.status === "ACTIVE" ? "active" : "inactive"}`}>
+                {r.status}
+              </span>
+
+              {/* 🔹 ACTIONS */}
               <div className="actions">
+
                 <Link to={`/edit-resource/${r.id}`}>
-                  <button className="edit">Edit</button>
+                  <button className="edit">
+                    <Pencil size={16} /> Edit
+                  </button>
                 </Link>
 
                 <button
                   className="delete"
                   onClick={() => remove(r.id)}
                 >
-                  Delete
+                  <Trash2 size={16} /> Delete
                 </button>
+
               </div>
+
             </div>
           ))
         )}
