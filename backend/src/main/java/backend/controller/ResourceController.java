@@ -1,9 +1,11 @@
 package backend.controller;
-
+import backend.service.PdfService;
 import jakarta.validation.Valid;
 import backend.model.Resource;
 import backend.repository.ResourceRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import java.io.ByteArrayInputStream;
 
 import java.util.List;
 
@@ -31,6 +33,23 @@ public class ResourceController {
                 type == null ? "" : type,
                 location == null ? "" : location
         );
+    }
+    //PDF
+    @GetMapping("/pdf")
+    public ResponseEntity<byte[]> downloadPdf() {
+
+        List<Resource> list = repo.findAll();
+
+        ByteArrayInputStream pdf = PdfService.generate(list);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=resources.pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf.readAllBytes());
     }
 
     // GET ONE

@@ -20,6 +20,13 @@ export const createResource = (data) => {
   return axios.post(API, data);
 };
 
+//PDF
+export const downloadPDF = () => {
+  return axios.get("http://localhost:8080/api/resources/pdf", {
+    responseType: "blob"
+  });
+};
+
 // 🔹 UPDATE resource
 export const updateResource = (id, data) => {
   return axios.put(`${API}/${id}`, data);
