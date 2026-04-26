@@ -9,6 +9,8 @@ function TicketDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -19,11 +21,35 @@ function TicketDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const fetchComments = async () => {
+    try {
+      const response = await TicketService.getComments(id);
+      setComments(Array.isArray(response.data) ? response.data : []);
+    } catch (err) {
+      setComments([]);
+    }
+  };
+
+  const fetchAttachments = async () => {
+    try {
+      const response = await TicketService.getAttachments(id);
+      setAttachments(Array.isArray(response.data) ? response.data : []);
+    } catch (err) {
+      setAttachments([]);
+    }
+  };
+
   const fetchTicketDetails = async () => {
     setLoading(true);
     try {
-      const response = await TicketService.getTicketById(id);
-      setTicket(response.data);
+      const [ticketResponse, commentsResponse, attachmentsResponse] = await Promise.all([
+        TicketService.getTicketById(id),
+        TicketService.getComments(id),
+        TicketService.getAttachments(id)
+      ]);
+      setTicket(ticketResponse.data);
+      setComments(Array.isArray(commentsResponse.data) ? commentsResponse.data : []);
+      setAttachments(Array.isArray(attachmentsResponse.data) ? attachmentsResponse.data : []);
     } catch (err) {
       setError('Failed to load ticket details');
     } finally {
@@ -145,13 +171,13 @@ function TicketDetails() {
               className={`tab ${activeTab === 'comments' ? 'active' : ''}`}
               onClick={() => setActiveTab('comments')}
             >
-              Comments ({ticket.comments?.length || 0})
+              Comments ({comments.length})
             </button>
             <button 
               className={`tab ${activeTab === 'attachments' ? 'active' : ''}`}
               onClick={() => setActiveTab('attachments')}
             >
-              Attachments ({ticket.attachments?.length || 0})
+              Attachments ({attachments.length})
             </button>
           </div>
 
@@ -194,11 +220,11 @@ function TicketDetails() {
           )}
 
           {activeTab === 'comments' && (
-            <CommentsSection ticketId={id} comments={ticket.comments} onUpdate={fetchTicketDetails} />
+            <CommentsSection ticketId={id} comments={comments} onUpdate={fetchComments} />
           )}
 
           {activeTab === 'attachments' && (
-            <AttachmentsSection ticketId={id} attachments={ticket.attachments} onUpdate={fetchTicketDetails} />
+            <AttachmentsSection ticketId={id} attachments={attachments} onUpdate={fetchAttachments} />
           )}
         </div>
 
@@ -282,7 +308,6 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
         commentText: commentText
       });
       setCommentText('');
-      setUserEmail('');
       onUpdate();
     } catch (err) {
       setError('Failed to add comment');
