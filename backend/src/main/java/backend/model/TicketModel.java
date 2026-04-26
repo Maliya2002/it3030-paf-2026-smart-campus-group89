@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -63,9 +65,11 @@ public class TicketModel {
     @Column
     private LocalDateTime resolvedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> comments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AttachmentModel> attachments = new ArrayList<>();
 
@@ -202,6 +206,7 @@ public class TicketModel {
         this.resolvedAt = resolvedAt;
     }
 
+    @JsonIgnore
     public List<CommentModel> getComments() {
         return comments;
     }
@@ -210,6 +215,7 @@ public class TicketModel {
         this.comments = comments;
     }
 
+    @JsonIgnore
     public List<AttachmentModel> getAttachments() {
         return attachments;
     }
