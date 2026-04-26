@@ -8,7 +8,7 @@ function CreateResource() {
 
   const [data, setData] = useState({
     name: "",
-    type: "",
+    type: "ROOM",
     location: "",
     capacity: ""
   });
@@ -24,6 +24,8 @@ function CreateResource() {
 
     if (!data.type.trim()) {
       err.type = "Type is required";
+    } else if (!["ROOM", "LAB", "EQUIPMENT"].includes(data.type.trim().toUpperCase())) {
+      err.type = "Type must be ROOM, LAB, or EQUIPMENT";
     }
 
     if (!data.location.trim()) {
@@ -45,12 +47,24 @@ function CreateResource() {
 
     if (!validate()) return;
 
-    createResource({ ...data, capacity: Number(data.capacity) })
+    createResource({
+      ...data,
+      name: data.name.trim(),
+      type: data.type.trim().toUpperCase(),
+      location: data.location.trim(),
+      capacity: Number(data.capacity)
+    })
       .then(() => {
         alert("Resource Created!");
         navigate("/resources");
       })
-      .catch(() => alert("Error creating resource"));
+      .catch((err) => {
+        const backendMessage =
+          err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Error creating resource";
+        alert(backendMessage);
+      });
   };
 
   return (
@@ -64,11 +78,14 @@ function CreateResource() {
       />
       {errors.name && <p className="error">{errors.name}</p>}
 
-      <input
-        placeholder="Type (Room / Lab / Equipment)"
+      <select
         value={data.type}
         onChange={(e) => setData({ ...data, type: e.target.value })}
-      />
+      >
+        <option value="ROOM">Room</option>
+        <option value="LAB">Lab</option>
+        <option value="EQUIPMENT">Equipment</option>
+      </select>
       {errors.type && <p className="error">{errors.type}</p>}
 
       <input
