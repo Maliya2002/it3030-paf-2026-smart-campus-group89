@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TicketService from '../../services/TicketService';
 import '../styles/TicketDetails.css';
@@ -377,6 +377,7 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
 
 function AttachmentsSection({ ticketId, attachments, onUpdate }) {
   const currentUser = getCurrentUser();
+  const fileInputRef = useRef(null);
   const [files, setFiles] = useState(null);
   const [userEmail, setUserEmail] = useState(currentUser?.email || '');
   const [loading, setLoading] = useState(false);
@@ -384,8 +385,15 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
 
   const handleFileSelect = (e) => {
     const selectedFiles = Array.from(e.target.files);
+    const invalidType = selectedFiles.find((file) => !file.type.startsWith('image/'));
+    if (invalidType) {
+      setError('Only image files are allowed');
+      setFiles(null);
+      return;
+    }
     if (selectedFiles.length + (attachments?.length || 0) > 3) {
       setError('Maximum 3 attachments allowed per ticket');
+      setFiles(null);
       return;
     }
     setFiles(selectedFiles);
@@ -403,8 +411,9 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
     try {
       await TicketService.uploadAttachments(ticketId, files, userEmail);
       setFiles(null);
-      setUserEmail('');
-      document.querySelector('input[type="file"]').value = '';
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       onUpdate();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to upload attachments');
@@ -430,7 +439,15 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
           <div className="attachments-grid">
             {attachments.map(attachment => (
               <div key={attachment.id} className="attachment-card">
-                <div className="attachment-icon">📎</div>
+                {attachment.filePath ? (
+                  <img
+                    src={`http://localhost:8080/api/tickets/uploads/${attachment.filePath}`}
+                    alt={attachment.fileName}
+                    className="attachment-preview"
+                  />
+                ) : (
+                  <div className="attachment-icon">📎</div>
+                )}
                 <div className="attachment-info">
                   <h4>{attachment.fileName}</h4>
                   <p className="file-type">{attachment.fileType}</p>
@@ -463,15 +480,17 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
         />
         <div className="file-input-wrapper">
           <input
+            id={`attachment-input-${ticketId}`}
+            ref={fileInputRef}
             type="file"
             multiple
             onChange={handleFileSelect}
             className="file-input"
             accept="image/*"
           />
-          <span className="file-input-label">
+          <label htmlFor={`attachment-input-${ticketId}`} className="file-input-label">
             {files ? `${files.length} file(s) selected` : 'Choose images (max 3)'}
-          </span>
+          </label>
         </div>
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Uploading...' : 'Upload Attachments'}
