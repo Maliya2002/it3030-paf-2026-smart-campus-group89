@@ -9,6 +9,9 @@ import TicketDetails from './components/TicketDetails/TicketDetails';
 import ResourceList from './components/ResourceList/ResourceList';
 import CreateResource from './components/CreateResource/CreateResource';
 import EditResource from './components/EditResource/EditResource';
+import CreateBooking from './components/CreateBooking/CreateBooking';
+import BookingList from './components/BookingList/BookingList';
+import BookingDetails from './components/BookingDetails/BookingDetails';
 import { isAuthenticated } from './utils/auth';
 
 function ProtectedRoute() {
@@ -42,6 +45,9 @@ function App() {
             <Route path="/resources" element={<ResourceList />} />
             <Route path="/create-resource" element={<CreateResource />} />
             <Route path="/edit-resource/:id" element={<EditResource />} />
+            <Route path="/createbooking" element={<CreateBooking />} />
+            <Route path="/allbookings" element={<BookingList />} />
+            <Route path="/bookingdetails/:id" element={<BookingDetails />} />
           </Route>
           <Route
             path="*"

@@ -34,10 +34,13 @@ const modules = [
     owner: 'Member 2',
     description:
       'Handles reservations, availability checks, and scheduling for campus resources.',
-    status: 'Planned module',
+    status: 'Available now',
     accent: 'teal',
     icon: CalendarCheck,
-    actions: []
+    actions: [
+      { label: 'Create Booking', to: '/createbooking', primary: true },
+      { label: 'View Bookings', to: '/allbookings', primary: false }
+    ]
   },
   {
     id: 'ticketing',
@@ -112,6 +115,7 @@ function Home() {
             <a href="#modules" className="nav-item">Modules</a>
             <a href="#flow" className="nav-item">Flow</a>
             <Link to="/resources" className="nav-item">Facilities</Link>
+            <Link to="/allbookings" className="nav-item">Bookings</Link>
             {currentUser && <span className="nav-user">{currentUser.fullName}</span>}
             <Link to="/alltickets" className="nav-cta">Open Ticketing</Link>
             <button type="button" className="nav-signout" onClick={handleSignOut}>
@@ -123,12 +127,12 @@ function Home() {
         <div className="hero-layout">
           <section className="hero-copy">
             <span className="hero-badge">Integrated student and staff service portal</span>
-            <h2>One homepage for the full project, with your ticketing module ready to use.</h2>
+            <h2>One homepage for the full project, with booking, facilities, and ticketing ready to use.</h2>
             <p>
               This landing page introduces all four parts of the smart campus system while
-              keeping implementation boundaries clear. The maintenance and incident ticketing
-              area is connected now, and the other modules are presented as upcoming team
-              integrations.
+              keeping implementation boundaries clear. Facilities, booking management, and
+              maintenance ticketing are connected now, while remaining modules are upcoming
+              team integrations.
             </p>
 
             <div className="hero-actions">
@@ -139,6 +143,10 @@ function Home() {
               <Link to="/resources" className="secondary-action">
                 <Building2 size={18} />
                 Explore Facilities
+              </Link>
+              <Link to="/allbookings" className="secondary-action">
+                <CalendarCheck size={18} />
+                View Bookings
               </Link>
               <Link to="/alltickets" className="secondary-action">
                 <Ticket size={18} />
@@ -153,8 +161,8 @@ function Home() {
                 <Wrench size={18} />
                 <span>Live Modules</span>
               </div>
-              <h3>Ticketing + Facilities</h3>
-              <p>Ticketing is active now, and facility/resource management is connected through the homepage.</p>
+              <h3>Ticketing + Facilities + Booking</h3>
+              <p>Booking is now connected with two quick actions in the module tile.</p>
             </div>
 
             <div className="panel-grid">
