@@ -1,31 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import { jwtDecode } from 'jwt-decode';
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  profilePicture?: string;
-  roles: string[];
-  provider: string;
-}
+const AuthContext = createContext(undefined);
 
-interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
-  updateUser: (userData: Partial<User>) => void;
-  hasRole: (role: string) => boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadUser = useCallback(async () => {
@@ -36,13 +15,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      const decoded: any = jwtDecode(token);
-      if (decoded.exp * 1000 < Date.now()) {
-        localStorage.clear();
-        setIsLoading(false);
-        return;
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        if (payload.exp * 1000 < Date.now()) {
+          localStorage.clear();
+          setIsLoading(false);
+          return;
+        }
       }
-
       const response = await api.get('/auth/me');
       setUser(response.data);
     } catch (error) {
@@ -56,19 +37,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadUser();
   }, [loadUser]);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email, password) => {
     const response = await api.post('/auth/login', { email, password });
     const { accessToken, refreshToken, user: userData } = response.data;
-
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     setUser(userData);
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name, email, password) => {
     const response = await api.post('/auth/register', { name, email, password });
     const { accessToken, refreshToken, user: userData } = response.data;
-
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     setUser(userData);
@@ -80,25 +59,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     window.location.href = '/login';
   };
 
-  const updateUser = (userData: Partial<User>) => {
-    setUser(prev => prev ? { ...prev, ...userData } : null);
+  const updateUser = (userData) => {
+    setUser(prev => (prev ? { ...prev, ...userData } : null));
   };
 
-  const hasRole = (role: string) => {
+  const hasRole = (role) => {
     return user?.roles?.includes(role) || false;
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      isLoading,
-      isAuthenticated: !!user,
-      login,
-      register,
-      logout,
-      updateUser,
-      hasRole,
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        isAuthenticated: !!user,
+        login,
+        register,
+        logout,
+        updateUser,
+        hasRole,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

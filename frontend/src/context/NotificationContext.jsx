@@ -3,48 +3,14 @@ import api from '../services/api';
 import { useAuth } from './AuthContext';
 import toast from 'react-hot-toast';
 
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  type: string;
-  status: string;
-  referenceId?: number;
-  referenceType?: string;
-  actionUrl?: string;
-  createdAt: string;
-  readAt?: string;
-  isRead: boolean;
-}
+const NotificationContext = createContext(undefined);
 
-interface NotificationPreferences {
-  notificationBooking: boolean;
-  notificationTicket: boolean;
-  notificationComment: boolean;
-  notificationSystem: boolean;
-}
-
-interface NotificationContextType {
-  notifications: Notification[];
-  unreadCount: number;
-  isLoading: boolean;
-  preferences: NotificationPreferences | null;
-  fetchNotifications: () => Promise<void>;
-  markAsRead: (id: number) => Promise<void>;
-  markAllAsRead: () => Promise<void>;
-  deleteNotification: (id: number) => Promise<void>;
-  updatePreferences: (prefs: NotificationPreferences) => Promise<void>;
-  fetchPreferences: () => Promise<void>;
-}
-
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
-
-export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const NotificationProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
+  const [preferences, setPreferences] = useState(null);
 
   const fetchNotifications = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -77,7 +43,6 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       fetchNotifications();
       fetchPreferences();
 
-      // Poll for new notifications every 30 seconds
       const interval = setInterval(() => {
         fetchNotifications();
       }, 30000);
@@ -86,7 +51,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   }, [isAuthenticated, fetchNotifications, fetchPreferences]);
 
-  const markAsRead = async (id: number) => {
+  const markAsRead = async (id) => {
     try {
       await api.patch(`/notifications/${id}/read`);
       setNotifications(prev =>
@@ -109,7 +74,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const deleteNotification = async (id: number) => {
+  const deleteNotification = async (id) => {
     try {
       await api.delete(`/notifications/${id}`);
       const deleted = notifications.find(n => n.id === id);
@@ -123,7 +88,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const updatePreferences = async (prefs: NotificationPreferences) => {
+  const updatePreferences = async (prefs) => {
     try {
       const response = await api.put('/notifications/preferences', prefs);
       setPreferences(response.data);
@@ -134,18 +99,20 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   return (
-    <NotificationContext.Provider value={{
-      notifications,
-      unreadCount,
-      isLoading,
-      preferences,
-      fetchNotifications,
-      markAsRead,
-      markAllAsRead,
-      deleteNotification,
-      updatePreferences,
-      fetchPreferences,
-    }}>
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        unreadCount,
+        isLoading,
+        preferences,
+        fetchNotifications,
+        markAsRead,
+        markAllAsRead,
+        deleteNotification,
+        updatePreferences,
+        fetchPreferences,
+      }}
+    >
       {children}
     </NotificationContext.Provider>
   );
