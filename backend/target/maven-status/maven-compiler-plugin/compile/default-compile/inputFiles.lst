@@ -1,5 +1,6 @@
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\BackendApplication.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\BookingController.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\ResourceController.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\TicketController.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundAdvice.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundException.java
@@ -11,10 +12,13 @@ C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\bac
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingModel.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingStatus.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\CommentModel.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\Resource.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketModel.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketPriority.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketStatus.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\AttachmentRepository.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\BookingRepository.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\CommentRepository.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\ResourceRepository.java
 C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\TicketRepository.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\PdfService.java

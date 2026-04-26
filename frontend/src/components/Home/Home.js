@@ -20,10 +20,13 @@ const modules = [
     owner: 'Member 1',
     description:
       'A central place to explore campus spaces, equipment, and asset details.',
-    status: 'Planned module',
+    status: 'Available now',
     accent: 'amber',
     icon: Building2,
-    actions: []
+    actions: [
+      { label: 'View Resources', to: '/resources', primary: true },
+      { label: 'Add Resource', to: '/create-resource', primary: false }
+    ]
   },
   {
     id: 'booking',
@@ -108,6 +111,7 @@ function Home() {
           <div className="campus-nav-links">
             <a href="#modules" className="nav-item">Modules</a>
             <a href="#flow" className="nav-item">Flow</a>
+            <Link to="/resources" className="nav-item">Facilities</Link>
             {currentUser && <span className="nav-user">{currentUser.fullName}</span>}
             <Link to="/alltickets" className="nav-cta">Open Ticketing</Link>
             <button type="button" className="nav-signout" onClick={handleSignOut}>
@@ -132,6 +136,10 @@ function Home() {
                 <ClipboardPlus size={18} />
                 Report an Issue
               </Link>
+              <Link to="/resources" className="secondary-action">
+                <Building2 size={18} />
+                Explore Facilities
+              </Link>
               <Link to="/alltickets" className="secondary-action">
                 <Ticket size={18} />
                 View Ticket Dashboard
@@ -143,10 +151,10 @@ function Home() {
             <div className="panel-card live-card">
               <div className="panel-header">
                 <Wrench size={18} />
-                <span>Live Module</span>
+                <span>Live Modules</span>
               </div>
-              <h3>Maintenance & Incident Ticketing</h3>
-              <p>Your implemented area is available from this homepage right now.</p>
+              <h3>Ticketing + Facilities</h3>
+              <p>Ticketing is active now, and facility/resource management is connected through the homepage.</p>
             </div>
 
             <div className="panel-grid">
