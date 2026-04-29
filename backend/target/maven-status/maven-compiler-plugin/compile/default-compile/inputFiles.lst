@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\BackendApplication.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\AuthController.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\BookingController.java
@@ -39,3 +40,21 @@ C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\GoogleTokenVerifierService.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\NotificationService.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\PdfService.java
+=======
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\BackendApplication.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\TicketController.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundAdvice.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundException.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\CommentNotFoundAdvice.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\CommentNotFoundException.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\TicketNotFoundAdvice.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\TicketNotFoundException.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\AttachmentModel.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\CommentModel.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketModel.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketPriority.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketStatus.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\AttachmentRepository.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\CommentRepository.java
+C:\Users\ASUS Vivobook\Documents\GitHub\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\TicketRepository.java
+>>>>>>> origin/Maintenance-&-Incident-Ticketing-KARUNARATHNE-K-M-K-T
