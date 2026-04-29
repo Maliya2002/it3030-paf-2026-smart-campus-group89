@@ -2,9 +2,8 @@ package backend.model;
 
 public enum BookingStatus {
     PENDING("Pending"),
-    CONFIRMED("Confirmed"),
+    APPROVED("Approved"),
     CANCELLED("Cancelled"),
-    COMPLETED("Completed"),
     REJECTED("Rejected");
 
     private final String displayName;

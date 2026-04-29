@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import BookingService from '../../services/BookingService';
 import '../styles/TicketDetails.css';
 import { ArrowLeft, AlertCircle, Loader, Trash2, Calendar, Clock, Users, MapPin, CheckCircle, XCircle } from 'lucide-react';
+import { getCurrentUser } from '../../utils/auth';
 
 function BookingDetails() {
   const { id } = useParams();
@@ -12,6 +13,8 @@ function BookingDetails() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const currentUser = getCurrentUser();
+  const isAdmin = currentUser?.role === 'ADMIN';
 
   useEffect(() => {
     fetchBookingDetails();
@@ -32,11 +35,21 @@ function BookingDetails() {
 
   const handleStatusChange = async (newStatus) => {
     try {
-      await BookingService.updateBookingStatus(id, newStatus);
-      setSuccessMessage(`Status updated to ${newStatus} successfully!`);
+      const reason = window.prompt(`Enter a reason for setting status to ${newStatus}:`);
+      if (!reason || !reason.trim()) {
+        setError('Reason is required for status changes');
+        return;
+      }
+      await BookingService.updateBookingStatus(id, {
+        status: newStatus,
+        reason: reason.trim(),
+        reviewedBy: currentUser?.email || '',
+        reviewerRole: isAdmin ? 'ADMIN' : 'USER'
+      });
+      setSuccessMessage(`Status updated to ${newStatus} successfully`);
       fetchBookingDetails();
     } catch (err) {
-      setError('Failed to update status');
+      setError(err.response?.data?.error || 'Failed to update status');
     }
   };
 
@@ -100,9 +113,8 @@ function BookingDetails() {
   const getStatusColor = (status) => {
     switch(status) {
       case 'PENDING': return 'status-pending';
-      case 'CONFIRMED': return 'status-confirmed';
+      case 'APPROVED': return 'status-confirmed';
       case 'CANCELLED': return 'status-cancelled';
-      case 'COMPLETED': return 'status-completed';
       case 'REJECTED': return 'status-rejected';
       default: return '';
     }
@@ -132,7 +144,9 @@ function BookingDetails() {
     return timeString ? timeString.substring(0, 5) : '';
   };
 
-  const canModify = booking.status !== 'CANCELLED' && booking.status !== 'REJECTED' && booking.status !== 'COMPLETED';
+  const isOwner = currentUser?.email === booking.requestedBy;
+  const canEditBooking = booking.status === 'PENDING' && isOwner;
+  const canDeleteBooking = isAdmin || (isOwner && booking.status === 'PENDING');
 
   return (
     <div className="ticket-details-container">
@@ -313,6 +327,13 @@ function BookingDetails() {
                     <p className="description-text">{booking.notes}</p>
                   </div>
                 )}
+
+                {booking.decisionReason && (
+                  <div className="details-section">
+                    <h3>Decision Reason</h3>
+                    <p className="description-text">{booking.decisionReason}</p>
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -328,17 +349,16 @@ function BookingDetails() {
                 value={booking.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="selector"
-                disabled={!canModify}
+                disabled
               >
                 <option value="PENDING">Pending</option>
-                <option value="CONFIRMED">Confirmed</option>
-                <option value="COMPLETED">Completed</option>
+                <option value="APPROVED">Approved</option>
                 <option value="CANCELLED">Cancelled</option>
                 <option value="REJECTED">Rejected</option>
               </select>
             </div>
 
-            {canModify && (
+            {canEditBooking && (
               <button
                 className="btn btn-secondary"
                 onClick={() => setIsEditing(true)}
@@ -348,13 +368,15 @@ function BookingDetails() {
               </button>
             )}
 
-            <button
-              className="btn btn-danger"
-              onClick={handleDeleteBooking}
-              style={{ marginTop: '10px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-            >
-              <Trash2 size={16} /> Delete Booking
-            </button>
+            {canDeleteBooking && (
+              <button
+                className="btn btn-danger"
+                onClick={handleDeleteBooking}
+                style={{ marginTop: '10px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+              >
+                <Trash2 size={16} /> Delete Booking
+              </button>
+            )}
           </div>
 
           <div className="sidebar-section">
@@ -381,16 +403,16 @@ function BookingDetails() {
 
           <div className="sidebar-section">
             <h3>Quick Actions</h3>
-            {booking.status === 'PENDING' && (
+            {isAdmin && booking.status === 'PENDING' && (
               <button
                 className="btn btn-success"
-                onClick={() => handleStatusChange('CONFIRMED')}
+                onClick={() => handleStatusChange('APPROVED')}
                 style={{ width: '100%', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               >
-                <CheckCircle size={16} /> Confirm Booking
+                <CheckCircle size={16} /> Approve Booking
               </button>
             )}
-            {booking.status === 'PENDING' && (
+            {isAdmin && booking.status === 'PENDING' && (
               <button
                 className="btn btn-danger"
                 onClick={() => handleStatusChange('REJECTED')}
@@ -399,7 +421,7 @@ function BookingDetails() {
                 <XCircle size={16} /> Reject Booking
               </button>
             )}
-            {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
+            {(isOwner || isAdmin) && booking.status === 'APPROVED' && (
               <button
                 className="btn btn-warning"
                 onClick={() => handleStatusChange('CANCELLED')}

@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import BookingService from '../../services/BookingService';
 import '../styles/TicketList.css';
 import { Plus, Search, Filter, AlertCircle, Loader, Calendar, Clock } from 'lucide-react';
+import { getCurrentUser } from '../../utils/auth';
 
 function BookingList() {
+  const currentUser = getCurrentUser();
+  const isAdmin = currentUser?.role === 'ADMIN';
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
     status: '',
-    requestedBy: '',
+    requestedBy: isAdmin ? '' : currentUser?.email || '',
     resourceType: ''
   });
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,9 +61,8 @@ function BookingList() {
   const getStatusColor = (status) => {
     switch(status) {
       case 'PENDING': return 'status-pending';
-      case 'CONFIRMED': return 'status-confirmed';
+      case 'APPROVED': return 'status-confirmed';
       case 'CANCELLED': return 'status-cancelled';
-      case 'COMPLETED': return 'status-completed';
       case 'REJECTED': return 'status-rejected';
       default: return '';
     }
@@ -82,7 +84,7 @@ function BookingList() {
     <div className="ticket-list-container">
       <div className="ticket-list-header">
         <div className="header-top">
-          <h1>All Bookings</h1>
+          <h1>{isAdmin ? 'All Bookings' : 'My Bookings'}</h1>
           <Link to="/createbooking" className="btn btn-primary btn-sm">
             <Plus size={18} /> Create Booking
           </Link>
@@ -114,9 +116,8 @@ function BookingList() {
           >
             <option value="">All Status</option>
             <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
+            <option value="APPROVED">Approved</option>
             <option value="CANCELLED">Cancelled</option>
-            <option value="COMPLETED">Completed</option>
             <option value="REJECTED">Rejected</option>
           </select>
 
@@ -127,15 +128,26 @@ function BookingList() {
             className="filter-select"
           >
             <option value="">All Resource Types</option>
-            <option value="Classroom">Classroom</option>
-            <option value="Lab">Lab</option>
-            <option value="Meeting Room">Meeting Room</option>
-            <option value="Auditorium">Auditorium</option>
-            <option value="Sports Facility">Sports Facility</option>
-            <option value="Library Room">Library Room</option>
-            <option value="Event Space">Event Space</option>
-            <option value="Other">Other</option>
+            <option value="CLASSROOM">Classroom</option>
+            <option value="LAB">Lab</option>
+            <option value="MEETING_ROOM">Meeting Room</option>
+            <option value="AUDITORIUM">Auditorium</option>
+            <option value="SPORTS_FACILITY">Sports Facility</option>
+            <option value="LIBRARY_ROOM">Library Room</option>
+            <option value="EVENT_SPACE">Event Space</option>
+            <option value="OTHER">Other</option>
           </select>
+
+          {isAdmin && (
+            <input
+              type="text"
+              name="requestedBy"
+              value={filters.requestedBy}
+              onChange={handleFilterChange}
+              className="search-input"
+              placeholder="Filter by requester email"
+            />
+          )}
         </div>
       </div>
 

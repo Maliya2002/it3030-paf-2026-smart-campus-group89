@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { updateResource, getResources } from "../../services/ResourceService";
+import { updateResource, getResourceById } from "../../services/ResourceService";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/resource.css";
 
 function EditResource() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const resourceTypes = [
+    { value: "CLASSROOM", label: "Classroom" },
+    { value: "LAB", label: "Lab" },
+    { value: "MEETING_ROOM", label: "Meeting Room" },
+    { value: "AUDITORIUM", label: "Auditorium" },
+    { value: "SPORTS_FACILITY", label: "Sports Facility" },
+    { value: "LIBRARY_ROOM", label: "Library Room" },
+    { value: "EVENT_SPACE", label: "Event Space" },
+    { value: "OTHER", label: "Other" }
+  ];
+  const statusOptions = ["ACTIVE", "OUT_OF_SERVICE"];
 
   const [data, setData] = useState({
     name: "",
     type: "",
     location: "",
-    capacity: ""
+    capacity: "",
+    status: "ACTIVE"
   });
 
   useEffect(() => {
-    getResources().then(res => {
-      const found = res.data.find(r => String(r.id) === id);
-      if (found) setData(found);
-    });
+    getResourceById(id).then(res => setData(res.data));
   }, [id]);
 
   const submit = (e) => {
@@ -40,10 +49,16 @@ function EditResource() {
         onChange={(e) => setData({ ...data, name: e.target.value })}
       />
 
-      <input
+      <select
         value={data.type}
         onChange={(e) => setData({ ...data, type: e.target.value })}
-      />
+      >
+        {resourceTypes.map((type) => (
+          <option key={type.value} value={type.value}>
+            {type.label}
+          </option>
+        ))}
+      </select>
 
       <input
         value={data.location}
@@ -51,9 +66,21 @@ function EditResource() {
       />
 
       <input
+        type="number"
         value={data.capacity}
         onChange={(e) => setData({ ...data, capacity: e.target.value })}
       />
+
+      <select
+        value={data.status || "ACTIVE"}
+        onChange={(e) => setData({ ...data, status: e.target.value })}
+      >
+        {statusOptions.map((status) => (
+          <option key={status} value={status}>
+            {status}
+          </option>
+        ))}
+      </select>
 
       <button className="btn">Update</button>
     </form>

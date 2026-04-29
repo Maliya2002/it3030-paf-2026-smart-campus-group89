@@ -58,7 +58,7 @@ function CreateTicket() {
       setSuccess(`Ticket created successfully! Ticket ID: ${response.data.ticketId}`);
       
       setTimeout(() => {
-        navigate(`/ticketdetails/${response.data.id}`);
+        navigate('/alltickets');
       }, 2000);
     } catch (err) {
       setError(err.response?.data?.errorMessage || 'Failed to create ticket');

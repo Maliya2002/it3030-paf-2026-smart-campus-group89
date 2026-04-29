@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -29,16 +31,18 @@ public class ResourceController {
     public List<Resource> getAll(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Integer minCapacity
     ) {
-        if (type == null && location == null && status == null) {
+        if (type == null && location == null && status == null && minCapacity == null) {
             return repo.findAll();
         }
 
-        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCaseAndStatusContainingIgnoreCase(
+        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCaseAndStatusContainingIgnoreCaseAndCapacityGreaterThanEqual(
                 type == null ? "" : type,
                 location == null ? "" : location,
-                status == null ? "" : status
+                status == null ? "" : status,
+                minCapacity == null ? 0 : minCapacity
         );
     }
 
@@ -65,18 +69,27 @@ public class ResourceController {
 
     @PostMapping
     public Resource create(@Valid @RequestBody Resource r) {
-        r.setStatus("ACTIVE");
+        normalizeResource(r);
+        if (r.getStatus() == null || r.getStatus().isBlank()) {
+            r.setStatus("ACTIVE");
+        }
+        applyDefaultAvailability(r);
         return repo.save(r);
     }
 
     @PutMapping("/{id}")
-    public Resource update(@PathVariable Long id, @RequestBody Resource r) {
+    public Resource update(@PathVariable Long id, @Valid @RequestBody Resource r) {
         Resource existing = repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
         existing.setName(r.getName());
         existing.setType(r.getType());
         existing.setLocation(r.getLocation());
         existing.setCapacity(r.getCapacity());
+        existing.setAvailabilityStart(r.getAvailabilityStart());
+        existing.setAvailabilityEnd(r.getAvailabilityEnd());
+        existing.setStatus(r.getStatus());
+        normalizeResource(existing);
+        applyDefaultAvailability(existing);
         return repo.save(existing);
     }
 
@@ -92,4 +105,28 @@ public class ResourceController {
         r.setStatus(r.getStatus().equals("ACTIVE") ? "OUT_OF_SERVICE" : "ACTIVE");
         return repo.save(r);
     }
+
+    private void normalizeResource(Resource resource) {
+        if (resource.getType() != null) {
+            resource.setType(resource.getType().trim().toUpperCase(Locale.ROOT));
+        }
+        if (resource.getStatus() != null) {
+            resource.setStatus(resource.getStatus().trim().toUpperCase(Locale.ROOT));
+        }
+    }
+
+    private void applyDefaultAvailability(Resource resource) {
+        if (resource.getAvailabilityStart() == null) {
+            resource.setAvailabilityStart(LocalTime.of(8, 0));
+        }
+        if (resource.getAvailabilityEnd() == null) {
+            resource.setAvailabilityEnd(LocalTime.of(17, 0));
+        }
+        if (!resource.getAvailabilityStart().isBefore(resource.getAvailabilityEnd())) {
+            resource.setAvailabilityStart(LocalTime.of(8, 0));
+            resource.setAvailabilityEnd(LocalTime.of(17, 0));
+        }
+    }
+
+
 }

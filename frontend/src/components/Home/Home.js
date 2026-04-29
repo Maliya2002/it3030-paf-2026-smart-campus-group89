@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import '../styles/Home.css';
 import { getCurrentUser, signOutUser } from '../../utils/auth';
+import NotificationPanel from '../Notifications/NotificationPanel';
 
 const modules = [
   {
@@ -24,8 +25,8 @@ const modules = [
     accent: 'amber',
     icon: Building2,
     actions: [
-      { label: 'View Resources', to: '/resources', primary: true },
-      { label: 'Add Resource', to: '/create-resource', primary: false }
+      { label: 'View Resources', to: '/resources', primary: true, roles: ['USER', 'ADMIN'] },
+      { label: 'Add Resource', to: '/create-resource', primary: false, roles: ['ADMIN'] }
     ]
   },
   {
@@ -34,10 +35,13 @@ const modules = [
     owner: 'Member 2',
     description:
       'Handles reservations, availability checks, and scheduling for campus resources.',
-    status: 'Planned module',
+    status: 'Available now',
     accent: 'teal',
     icon: CalendarCheck,
-    actions: []
+    actions: [
+      { label: 'Create Booking', to: '/createbooking', primary: true, roles: ['USER', 'ADMIN'] },
+      { label: 'View Bookings', to: '/allbookings', primary: false, roles: ['USER', 'ADMIN'] }
+    ]
   },
   {
     id: 'ticketing',
@@ -49,8 +53,8 @@ const modules = [
     accent: 'rose',
     icon: Wrench,
     actions: [
-      { label: 'Create Ticket', to: '/createticket', primary: true },
-      { label: 'View Tickets', to: '/alltickets', primary: false }
+      { label: 'Create Ticket', to: '/createticket', primary: true, roles: ['USER', 'ADMIN'] },
+      { label: 'View Tickets', to: '/alltickets', primary: false, roles: ['USER', 'ADMIN'] }
     ]
   },
   {
@@ -73,7 +77,7 @@ const journeySteps = [
   },
   {
     title: 'Reserve',
-    text: 'Book spaces and resources once the booking module is connected by the team.'
+    text: 'Book spaces and resources by selecting date, time, and expected attendees.'
   },
   {
     title: 'Report',
@@ -88,6 +92,7 @@ const journeySteps = [
 function Home() {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
+  const isAdmin = currentUser?.role === 'ADMIN';
 
   const handleSignOut = () => {
     signOutUser();
@@ -112,7 +117,9 @@ function Home() {
             <a href="#modules" className="nav-item">Modules</a>
             <a href="#flow" className="nav-item">Flow</a>
             <Link to="/resources" className="nav-item">Facilities</Link>
+            <NotificationPanel />
             {currentUser && <span className="nav-user">{currentUser.fullName}</span>}
+            {currentUser && <span className="nav-user role-pill">{currentUser.role}</span>}
             <Link to="/alltickets" className="nav-cta">Open Ticketing</Link>
             <button type="button" className="nav-signout" onClick={handleSignOut}>
               Sign Out
@@ -123,12 +130,12 @@ function Home() {
         <div className="hero-layout">
           <section className="hero-copy">
             <span className="hero-badge">Integrated student and staff service portal</span>
-            <h2>One homepage for the full project, with your ticketing module ready to use.</h2>
+            <h2>One homepage for the full project, with booking, facilities, and ticketing ready.</h2>
             <p>
               This landing page introduces all four parts of the smart campus system while
               keeping implementation boundaries clear. The maintenance and incident ticketing
-              area is connected now, and the other modules are presented as upcoming team
-              integrations.
+              and booking areas are connected now, and the remaining modules are presented
+              as upcoming team integrations.
             </p>
 
             <div className="hero-actions">
@@ -139,6 +146,16 @@ function Home() {
               <Link to="/resources" className="secondary-action">
                 <Building2 size={18} />
                 Explore Facilities
+              </Link>
+              {isAdmin && (
+                <Link to="/create-resource" className="secondary-action">
+                  <Building2 size={18} />
+                  Add Resource
+                </Link>
+              )}
+              <Link to="/allbookings" className="secondary-action">
+                <CalendarCheck size={18} />
+                View Bookings
               </Link>
               <Link to="/alltickets" className="secondary-action">
                 <Ticket size={18} />
@@ -153,8 +170,8 @@ function Home() {
                 <Wrench size={18} />
                 <span>Live Modules</span>
               </div>
-              <h3>Ticketing + Facilities</h3>
-              <p>Ticketing is active now, and facility/resource management is connected through the homepage.</p>
+              <h3>Ticketing + Facilities + Booking</h3>
+              <p>Resource catalogue and booking workflow are connected through the homepage.</p>
             </div>
 
             <div className="panel-grid">
@@ -205,7 +222,9 @@ function Home() {
 
                   <div className="module-actions">
                     {module.actions.length > 0 ? (
-                      module.actions.map((action) => (
+                      module.actions
+                        .filter((action) => !action.roles || action.roles.includes(currentUser?.role))
+                        .map((action) => (
                         <Link
                           key={action.to}
                           to={action.to}
@@ -214,7 +233,7 @@ function Home() {
                           {action.label}
                           <ArrowRight size={16} />
                         </Link>
-                      ))
+                        ))
                     ) : (
                       <span className="module-placeholder">UI entry reserved for team integration</span>
                     )}
