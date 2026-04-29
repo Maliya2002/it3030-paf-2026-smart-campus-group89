@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 backend\dto\AuthResponse.class
 backend\repository\UserRepository.class
 backend\exception\TicketNotFoundAdvice.class
@@ -31,3 +32,5 @@ backend\service\NotificationService.class
 backend\exception\AttachmentNotFoundAdvice.class
 backend\security\SecurityUtils.class
 backend\service\GoogleTokenVerifierService.class
+=======
+>>>>>>> origin/Facilities-SASMITHA-P-M-V

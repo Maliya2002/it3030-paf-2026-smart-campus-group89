@@ -1,20 +1,13 @@
 package backend.controller;
-
-import backend.model.Resource;
-import backend.repository.ResourceRepository;
 import backend.service.PdfService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import backend.model.Resource;
+import backend.repository.ResourceRepository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.http.*;
 import java.io.ByteArrayInputStream;
-import java.time.LocalTime;
+
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -27,28 +20,28 @@ public class ResourceController {
         this.repo = repo;
     }
 
+    // GET ALL + FILTER
     @GetMapping
     public List<Resource> getAll(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) Integer minCapacity
+            @RequestParam(required = false) String status
     ) {
-        if (type == null && location == null && status == null && minCapacity == null) {
+        if (type == null && location == null) {
             return repo.findAll();
         }
-
-        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCaseAndStatusContainingIgnoreCaseAndCapacityGreaterThanEqual(
+        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
                 type == null ? "" : type,
                 location == null ? "" : location,
-                status == null ? "" : status,
-                minCapacity == null ? 0 : minCapacity
+                status == null ? "" : status
         );
     }
-
+    //PDF
     @GetMapping("/pdf")
     public ResponseEntity<byte[]> downloadPdf() {
+
         List<Resource> list = repo.findAll();
+
         ByteArrayInputStream pdf = PdfService.generate(list);
 
         HttpHeaders headers = new HttpHeaders();
@@ -61,72 +54,41 @@ public class ResourceController {
                 .body(pdf.readAllBytes());
     }
 
+    // GET ONE
     @GetMapping("/{id}")
     public Resource getOne(@PathVariable Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
+        return repo.findById(id).orElseThrow();
     }
 
+    // CREATE
     @PostMapping
-    public Resource create(@Valid @RequestBody Resource r) {
-        normalizeResource(r);
-        if (r.getStatus() == null || r.getStatus().isBlank()) {
-            r.setStatus("ACTIVE");
-        }
-        applyDefaultAvailability(r);
+    public Resource create(@Valid@RequestBody Resource r) {
+        r.setStatus("ACTIVE");
         return repo.save(r);
     }
 
+    // UPDATE
     @PutMapping("/{id}")
-    public Resource update(@PathVariable Long id, @Valid @RequestBody Resource r) {
-        Resource existing = repo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
+    public Resource update(@PathVariable Long id, @RequestBody Resource r) {
+        Resource existing = repo.findById(id).orElseThrow();
         existing.setName(r.getName());
         existing.setType(r.getType());
         existing.setLocation(r.getLocation());
         existing.setCapacity(r.getCapacity());
-        existing.setAvailabilityStart(r.getAvailabilityStart());
-        existing.setAvailabilityEnd(r.getAvailabilityEnd());
-        existing.setStatus(r.getStatus());
-        normalizeResource(existing);
-        applyDefaultAvailability(existing);
         return repo.save(existing);
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repo.deleteById(id);
     }
 
+    // TOGGLE STATUS
     @PatchMapping("/{id}/status")
     public Resource toggle(@PathVariable Long id) {
-        Resource r = repo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
+        Resource r = repo.findById(id).orElseThrow();
         r.setStatus(r.getStatus().equals("ACTIVE") ? "OUT_OF_SERVICE" : "ACTIVE");
         return repo.save(r);
     }
-
-    private void normalizeResource(Resource resource) {
-        if (resource.getType() != null) {
-            resource.setType(resource.getType().trim().toUpperCase(Locale.ROOT));
-        }
-        if (resource.getStatus() != null) {
-            resource.setStatus(resource.getStatus().trim().toUpperCase(Locale.ROOT));
-        }
-    }
-
-    private void applyDefaultAvailability(Resource resource) {
-        if (resource.getAvailabilityStart() == null) {
-            resource.setAvailabilityStart(LocalTime.of(8, 0));
-        }
-        if (resource.getAvailabilityEnd() == null) {
-            resource.setAvailabilityEnd(LocalTime.of(17, 0));
-        }
-        if (!resource.getAvailabilityStart().isBefore(resource.getAvailabilityEnd())) {
-            resource.setAvailabilityStart(LocalTime.of(8, 0));
-            resource.setAvailabilityEnd(LocalTime.of(17, 0));
-        }
-    }
-
-
 }

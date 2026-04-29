@@ -6,6 +6,7 @@ import Home from './components/Home/Home';
 import CreateTicket from './components/CreateTicket/CreateTicket';
 import TicketList from './components/TicketList/TicketList';
 import TicketDetails from './components/TicketDetails/TicketDetails';
+<<<<<<< HEAD
 import ResourceList from './components/ResourceList/ResourceList';
 import CreateResource from './components/CreateResource/CreateResource';
 import EditResource from './components/EditResource/EditResource';
@@ -34,12 +35,18 @@ function AdminRoute() {
   }
   return <Outlet />;
 }
+=======
+import ResourceList from "./components/ResourceList/ResourceList";
+import CreateResource from "./components/CreateResource/CreateResource";
+import EditResource from "./components/EditResource/EditResource";
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
 
 function App() {
   return (
     <div>
       <React.Fragment>
         <Routes>
+<<<<<<< HEAD
           <Route
             path="/"
             element={isAuthenticated() ? <Navigate to="/home" replace /> : <SignIn />}
@@ -76,6 +83,15 @@ function App() {
             path="*"
             element={<Navigate to={isAuthenticated() ? '/home' : '/'} replace />}
           />
+=======
+          <Route path="/" element={<Home />} />
+          <Route path="/createticket" element={<CreateTicket />} />
+          <Route path="/alltickets" element={<TicketList />} />
+          <Route path="/ticketdetails/:id" element={<TicketDetails />} />
+          <Route path="/resources" element={<ResourceList />} />
+          <Route path="/edit-resource/:id" element={<EditResource />} />
+          <Route path="/create-resource" element={<CreateResource />} />
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
         </Routes>
       </React.Fragment>
     </div>

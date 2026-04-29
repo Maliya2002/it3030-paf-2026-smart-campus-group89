@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createResource } from "../../services/ResourceService";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import "../styles/resource.css";
 
 function CreateResource() {
@@ -19,6 +20,16 @@ function CreateResource() {
   const [data, setData] = useState({
     name: "",
     type: "ROOM",
+=======
+
+function CreateResource() {
+
+  const navigate = useNavigate();
+
+  const [data, setData] = useState({
+    name: "",
+    type: "",
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
     location: "",
     capacity: ""
   });
@@ -34,8 +45,11 @@ function CreateResource() {
 
     if (!data.type.trim()) {
       err.type = "Type is required";
+<<<<<<< HEAD
     } else if (!["ROOM", "LAB", "EQUIPMENT"].includes(data.type.trim().toUpperCase())) {
       err.type = "Type must be ROOM, LAB, or EQUIPMENT";
+=======
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
     }
 
     if (!data.location.trim()) {
@@ -44,7 +58,11 @@ function CreateResource() {
 
     if (!data.capacity) {
       err.capacity = "Capacity is required";
+<<<<<<< HEAD
     } else if (Number(data.capacity) <= 0) {
+=======
+    } else if (data.capacity <= 0) {
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
       err.capacity = "Capacity must be greater than 0";
     }
 
@@ -57,6 +75,7 @@ function CreateResource() {
 
     if (!validate()) return;
 
+<<<<<<< HEAD
     createResource({
       ...data,
       name: data.name.trim(),
@@ -64,10 +83,14 @@ function CreateResource() {
       location: data.location.trim(),
       capacity: Number(data.capacity)
     })
+=======
+    createResource(data)
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
       .then(() => {
         alert("Resource Created!");
         navigate("/resources");
       })
+<<<<<<< HEAD
       .catch((err) => {
 <<<<<<< HEAD
         const status = err?.response?.status;
@@ -171,3 +194,48 @@ function CreateResource() {
 }
 
 export default CreateResource;
+=======
+      .catch(() => alert("Error creating resource"));
+  };
+
+  return (
+    <form onSubmit={submit} className="card form">
+
+      <h2>Create Resource</h2>
+
+      {/* NAME */}
+      <input
+        placeholder="Name"
+        onChange={(e)=>setData({...data,name:e.target.value})}
+      />
+      {errors.name && <p className="error">{errors.name}</p>}
+
+      {/* TYPE */}
+      <input
+        placeholder="Type (Room / Lab / Equipment)"
+        onChange={(e)=>setData({...data,type:e.target.value})}
+      />
+      {errors.type && <p className="error">{errors.type}</p>}
+
+      {/* LOCATION */}
+      <input
+        placeholder="Location"
+        onChange={(e)=>setData({...data,location:e.target.value})}
+      />
+      {errors.location && <p className="error">{errors.location}</p>}
+
+      {/* CAPACITY */}
+      <input
+        type="number"
+        placeholder="Capacity"
+        onChange={(e)=>setData({...data,capacity:e.target.value})}
+      />
+      {errors.capacity && <p className="error">{errors.capacity}</p>}
+
+      <button className="btn">Create</button>
+    </form>
+  );
+}
+
+export default CreateResource;
+>>>>>>> origin/Facilities-SASMITHA-P-M-V
