@@ -1,63 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AlertCircle, Filter, Loader, Plus, Search } from 'lucide-react';
 import TicketService from '../../services/TicketService';
 import '../styles/TicketList.css';
-import { Plus, Search, Filter, AlertCircle, Loader } from 'lucide-react';
+
+const EMPTY_FILTERS = {
+  status: '',
+  priority: '',
+  category: '',
+  assignedTechnician: ''
+};
+
+const extractTicketsArray = (payload) => {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.content)) return payload.content;
+  if (Array.isArray(payload?.tickets)) return payload.tickets;
+  return [];
+};
 
 function TicketList() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [filters, setFilters] = useState({
-    status: '',
-    priority: '',
-    category: '',
-    assignedTechnician: ''
-  });
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetchTickets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, searchQuery]);
+    const fetchTickets = async () => {
+      setLoading(true);
+      setError('');
 
-  const fetchTickets = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await TicketService.getAllTickets(filters);
-      let filteredTickets = response.data;
-
-      // Client-side search
-      if (searchQuery) {
-        filteredTickets = filteredTickets.filter(ticket =>
-          ticket.ticketId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          ticket.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+      try {
+        const response = await TicketService.getAllTickets(filters);
+        const parsedTickets = extractTicketsArray(response?.data).filter((ticket) => ticket && typeof ticket === 'object');
+        setTickets(parsedTickets);
+      } catch (fetchError) {
+        setTickets([]);
+        setError('Failed to load tickets. Please try again.');
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setTickets(filteredTickets);
-    } catch (err) {
-      setError('Failed to load tickets');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchTickets();
+  }, [filters]);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const visibleTickets = useMemo(() => {
+    const list = Array.isArray(tickets) ? tickets : [];
+    const query = searchQuery.trim().toLowerCase();
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+    if (!query) return list;
+
+    return list.filter((ticket) => {
+      const ticketId = String(ticket.ticketId || '').toLowerCase();
+      const title = String(ticket.title || '').toLowerCase();
+      return ticketId.includes(query) || title.includes(query);
+    });
+  }, [tickets, searchQuery]);
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   const getPriorityColor = (priority) => {
-    switch(priority) {
+    switch (priority) {
       case 'CRITICAL': return 'priority-critical';
       case 'HIGH': return 'priority-high';
       case 'MEDIUM': return 'priority-medium';
@@ -67,7 +75,7 @@ function TicketList() {
   };
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'OPEN': return 'status-open';
       case 'IN_PROGRESS': return 'status-in-progress';
       case 'RESOLVED': return 'status-resolved';
@@ -78,13 +86,30 @@ function TicketList() {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    if (!dateString) return 'N/A';
+    const parsed = new Date(dateString);
+    if (Number.isNaN(parsed.getTime())) return 'N/A';
+
+    return parsed.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const formatDuration = (minutes) => {
+    if (minutes === null || minutes === undefined) return 'Pending';
+    const safe = Number(minutes);
+    if (Number.isNaN(safe) || safe < 0) return 'N/A';
+    if (safe < 60) return `${safe}m`;
+    const hours = Math.floor(safe / 60);
+    const remainingMinutes = safe % 60;
+    if (hours < 24) return `${hours}h ${remainingMinutes}m`;
+    const days = Math.floor(hours / 24);
+    const remainingHours = hours % 24;
+    return `${days}d ${remainingHours}h ${remainingMinutes}m`;
   };
 
   return (
@@ -104,7 +129,7 @@ function TicketList() {
               type="text"
               placeholder="Search by Ticket ID or Title..."
               value={searchQuery}
-              onChange={handleSearch}
+              onChange={(event) => setSearchQuery(event.target.value)}
               className="search-input"
             />
           </div>
@@ -114,13 +139,8 @@ function TicketList() {
           <div className="filter-icon">
             <Filter size={18} /> Filters:
           </div>
-          
-          <select
-            name="status"
-            value={filters.status}
-            onChange={handleFilterChange}
-            className="filter-select"
-          >
+
+          <select name="status" value={filters.status} onChange={handleFilterChange} className="filter-select">
             <option value="">All Status</option>
             <option value="OPEN">Open</option>
             <option value="IN_PROGRESS">In Progress</option>
@@ -129,12 +149,7 @@ function TicketList() {
             <option value="ON_HOLD">On Hold</option>
           </select>
 
-          <select
-            name="priority"
-            value={filters.priority}
-            onChange={handleFilterChange}
-            className="filter-select"
-          >
+          <select name="priority" value={filters.priority} onChange={handleFilterChange} className="filter-select">
             <option value="">All Priority</option>
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
@@ -142,12 +157,7 @@ function TicketList() {
             <option value="CRITICAL">Critical</option>
           </select>
 
-          <select
-            name="category"
-            value={filters.category}
-            onChange={handleFilterChange}
-            className="filter-select"
-          >
+          <select name="category" value={filters.category} onChange={handleFilterChange} className="filter-select">
             <option value="">All Categories</option>
             <option value="Infrastructure">Infrastructure</option>
             <option value="Hardware">Hardware</option>
@@ -155,6 +165,7 @@ function TicketList() {
             <option value="Network">Network</option>
             <option value="Equipment">Equipment</option>
             <option value="Security">Security</option>
+            <option value="Other">Other</option>
           </select>
         </div>
       </div>
@@ -170,49 +181,51 @@ function TicketList() {
           <Loader className="loading-spinner" size={40} />
           <p>Loading tickets...</p>
         </div>
-      ) : tickets.length === 0 ? (
+      ) : visibleTickets.length === 0 ? (
         <div className="empty-state">
           <p>No tickets found</p>
         </div>
       ) : (
         <div className="tickets-grid">
-          {tickets.map(ticket => (
+          {visibleTickets.map((ticket, index) => (
             <Link
-              to={`/ticketdetails/${ticket.id}`}
-              key={ticket.id}
+              to={ticket?.id ? `/ticketdetails/${ticket.id}` : '/alltickets'}
+              key={ticket?.id || ticket?.ticketId || `ticket-${index}`}
               className="ticket-card"
             >
               <div className="ticket-card-header">
                 <div className="ticket-id-section">
-                  <span className="ticket-id">{ticket.ticketId}</span>
+                  <span className="ticket-id">{ticket.ticketId || 'TKT-UNKNOWN'}</span>
                   <span className={`status-badge ${getStatusColor(ticket.status)}`}>
-                    {ticket.status.replace(/_/g, ' ')}
+                    {String(ticket.status || 'OPEN').replace(/_/g, ' ')}
                   </span>
                 </div>
                 <span className={`priority-badge ${getPriorityColor(ticket.priority)}`}>
-                  {ticket.priority}
+                  {ticket.priority || 'MEDIUM'}
                 </span>
               </div>
 
               <div className="ticket-card-body">
-                <h3 className="ticket-title">{ticket.title}</h3>
-                <p className="ticket-description">{ticket.description.substring(0, 80)}...</p>
-                
+                <h3 className="ticket-title">{ticket.title || 'Untitled ticket'}</h3>
+                <p className="ticket-description">{String(ticket.description || '').slice(0, 80)}...</p>
+
                 <div className="ticket-meta">
                   <div className="meta-item">
                     <span className="meta-label">Category:</span>
-                    <span className="meta-value">{ticket.category}</span>
+                    <span className="meta-value">{ticket.category || 'Not set'}</span>
                   </div>
                   {ticket.assignedTechnician && (
                     <div className="meta-item">
                       <span className="meta-label">Assigned:</span>
-                      <span className="meta-value">{ticket.assignedTechnician.split('@')[0]}</span>
+                      <span className="meta-value">{String(ticket.assignedTechnician).split('@')[0]}</span>
                     </div>
                   )}
                 </div>
 
                 <div className="ticket-footer">
                   <span className="created-date">{formatDate(ticket.createdAt)}</span>
+                  <span className="created-date">TFR: {formatDuration(ticket.timeToFirstResponseMinutes)}</span>
+                  <span className="created-date">TTR: {formatDuration(ticket.timeToResolutionMinutes)}</span>
                 </div>
               </div>
             </Link>
