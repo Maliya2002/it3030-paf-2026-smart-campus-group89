@@ -18,7 +18,7 @@ function CreateResource() {
 
   const [data, setData] = useState({
     name: "",
-    type: "",
+    type: "ROOM",
     location: "",
     capacity: ""
   });
@@ -34,6 +34,8 @@ function CreateResource() {
 
     if (!data.type.trim()) {
       err.type = "Type is required";
+    } else if (!["ROOM", "LAB", "EQUIPMENT"].includes(data.type.trim().toUpperCase())) {
+      err.type = "Type must be ROOM, LAB, or EQUIPMENT";
     }
 
     if (!data.location.trim()) {
@@ -55,12 +57,19 @@ function CreateResource() {
 
     if (!validate()) return;
 
-    createResource({ ...data, capacity: Number(data.capacity) })
+    createResource({
+      ...data,
+      name: data.name.trim(),
+      type: data.type.trim().toUpperCase(),
+      location: data.location.trim(),
+      capacity: Number(data.capacity)
+    })
       .then(() => {
         alert("Resource Created!");
         navigate("/resources");
       })
       .catch((err) => {
+<<<<<<< HEAD
         const status = err?.response?.status;
         const message =
           err?.response?.data?.message ||
@@ -70,6 +79,13 @@ function CreateResource() {
           'Unknown error';
 
         alert(`Error creating resource${status ? ` (HTTP ${status})` : ''}: ${message}`);
+=======
+        const backendMessage =
+          err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Error creating resource";
+        alert(backendMessage);
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
       });
   };
 
@@ -92,6 +108,7 @@ function CreateResource() {
             {errors.name && <p className="error">{errors.name}</p>}
           </label>
 
+<<<<<<< HEAD
           <label className="resource-field">
             <span>Resource Type *</span>
             <select
@@ -107,6 +124,17 @@ function CreateResource() {
             </select>
             {errors.type && <p className="error">{errors.type}</p>}
           </label>
+=======
+      <select
+        value={data.type}
+        onChange={(e) => setData({ ...data, type: e.target.value })}
+      >
+        <option value="ROOM">Room</option>
+        <option value="LAB">Lab</option>
+        <option value="EQUIPMENT">Equipment</option>
+      </select>
+      {errors.type && <p className="error">{errors.type}</p>}
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
 
           <label className="resource-field">
             <span>Location *</span>

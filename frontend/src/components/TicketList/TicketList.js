@@ -30,7 +30,10 @@ function TicketList() {
     const fetchTickets = async () => {
       setLoading(true);
       setError('');
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
       try {
         const response = await TicketService.getAllTickets(filters);
         const parsedTickets = extractTicketsArray(response?.data).filter((ticket) => ticket && typeof ticket === 'object');
@@ -49,6 +52,7 @@ function TicketList() {
   const visibleTickets = useMemo(() => {
     const list = Array.isArray(tickets) ? tickets : [];
     const query = searchQuery.trim().toLowerCase();
+<<<<<<< HEAD
 
     if (!query) return list;
 
@@ -59,6 +63,16 @@ function TicketList() {
     });
   }, [tickets, searchQuery]);
 
+=======
+    if (!query) return list;
+    return list.filter((ticket) => {
+      const ticketId = String(ticket.ticketId || '').toLowerCase();
+      const title = String(ticket.title || '').toLowerCase();
+      return ticketId.includes(query) || title.includes(query);
+    });
+  }, [tickets, searchQuery]);
+
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -89,7 +103,10 @@ function TicketList() {
     if (!dateString) return 'N/A';
     const parsed = new Date(dateString);
     if (Number.isNaN(parsed.getTime())) return 'N/A';
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     return parsed.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -139,7 +156,10 @@ function TicketList() {
           <div className="filter-icon">
             <Filter size={18} /> Filters:
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
           <select name="status" value={filters.status} onChange={handleFilterChange} className="filter-select">
             <option value="">All Status</option>
             <option value="OPEN">Open</option>
@@ -148,7 +168,10 @@ function TicketList() {
             <option value="CLOSED">Closed</option>
             <option value="ON_HOLD">On Hold</option>
           </select>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
           <select name="priority" value={filters.priority} onChange={handleFilterChange} className="filter-select">
             <option value="">All Priority</option>
             <option value="LOW">Low</option>
@@ -156,7 +179,10 @@ function TicketList() {
             <option value="HIGH">High</option>
             <option value="CRITICAL">Critical</option>
           </select>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
           <select name="category" value={filters.category} onChange={handleFilterChange} className="filter-select">
             <option value="">All Categories</option>
             <option value="Infrastructure">Infrastructure</option>
@@ -204,11 +230,13 @@ function TicketList() {
                   {ticket.priority || 'MEDIUM'}
                 </span>
               </div>
-
               <div className="ticket-card-body">
                 <h3 className="ticket-title">{ticket.title || 'Untitled ticket'}</h3>
                 <p className="ticket-description">{String(ticket.description || '').slice(0, 80)}...</p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
                 <div className="ticket-meta">
                   <div className="meta-item">
                     <span className="meta-label">Category:</span>
@@ -221,7 +249,6 @@ function TicketList() {
                     </div>
                   )}
                 </div>
-
                 <div className="ticket-footer">
                   <span className="created-date">{formatDate(ticket.createdAt)}</span>
                   <span className="created-date">TFR: {formatDuration(ticket.timeToFirstResponseMinutes)}</span>

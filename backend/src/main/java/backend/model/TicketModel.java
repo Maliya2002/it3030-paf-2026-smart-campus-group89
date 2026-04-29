@@ -1,7 +1,6 @@
 package backend.model;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tickets")
@@ -66,12 +64,6 @@ public class TicketModel {
 
     @Column
     private LocalDateTime resolvedAt;
-
-    @Column
-    private LocalDateTime firstRespondedAt;
-
-    @Column
-    private LocalDateTime closedAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -212,42 +204,6 @@ public class TicketModel {
 
     public void setResolvedAt(LocalDateTime resolvedAt) {
         this.resolvedAt = resolvedAt;
-    }
-
-    public LocalDateTime getFirstRespondedAt() {
-        return firstRespondedAt;
-    }
-
-    public void setFirstRespondedAt(LocalDateTime firstRespondedAt) {
-        this.firstRespondedAt = firstRespondedAt;
-    }
-
-    public LocalDateTime getClosedAt() {
-        return closedAt;
-    }
-
-    public void setClosedAt(LocalDateTime closedAt) {
-        this.closedAt = closedAt;
-    }
-
-    @Transient
-    public Long getTimeToFirstResponseMinutes() {
-        if (createdAt == null || firstRespondedAt == null) {
-            return null;
-        }
-        return ChronoUnit.MINUTES.between(createdAt, firstRespondedAt);
-    }
-
-    @Transient
-    public Long getTimeToResolutionMinutes() {
-        if (createdAt == null) {
-            return null;
-        }
-        LocalDateTime resolutionPoint = resolvedAt != null ? resolvedAt : closedAt;
-        if (resolutionPoint == null) {
-            return null;
-        }
-        return ChronoUnit.MINUTES.between(createdAt, resolutionPoint);
     }
 
     @JsonIgnore

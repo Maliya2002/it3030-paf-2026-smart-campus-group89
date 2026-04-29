@@ -39,8 +39,13 @@ const modules = [
     accent: 'teal',
     icon: CalendarCheck,
     actions: [
+<<<<<<< HEAD
       { label: 'Create Booking', to: '/createbooking', primary: true, roles: ['USER', 'ADMIN'] },
       { label: 'View Bookings', to: '/allbookings', primary: false, roles: ['USER', 'ADMIN'] }
+=======
+      { label: 'Create Booking', to: '/createbooking', primary: true },
+      { label: 'View Bookings', to: '/allbookings', primary: false }
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     ]
   },
   {
@@ -117,7 +122,11 @@ function Home() {
             <a href="#modules" className="nav-item">Modules</a>
             <a href="#flow" className="nav-item">Flow</a>
             <Link to="/resources" className="nav-item">Facilities</Link>
+<<<<<<< HEAD
             <NotificationPanel />
+=======
+            <Link to="/allbookings" className="nav-item">Bookings</Link>
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
             {currentUser && <span className="nav-user">{currentUser.fullName}</span>}
             {currentUser && <span className="nav-user role-pill">{currentUser.role}</span>}
             <Link to="/alltickets" className="nav-cta">Open Ticketing</Link>
@@ -130,12 +139,21 @@ function Home() {
         <div className="hero-layout">
           <section className="hero-copy">
             <span className="hero-badge">Integrated student and staff service portal</span>
+<<<<<<< HEAD
             <h2>One homepage for the full project, with booking, facilities, and ticketing ready.</h2>
             <p>
               This landing page introduces all four parts of the smart campus system while
               keeping implementation boundaries clear. The maintenance and incident ticketing
               and booking areas are connected now, and the remaining modules are presented
               as upcoming team integrations.
+=======
+            <h2>One homepage for the full project, with booking, facilities, and ticketing ready to use.</h2>
+            <p>
+              This landing page introduces all four parts of the smart campus system while
+              keeping implementation boundaries clear. Facilities, booking management, and
+              maintenance ticketing are connected now, while remaining modules are upcoming
+              team integrations.
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
             </p>
 
             <div className="hero-actions">
@@ -147,12 +165,15 @@ function Home() {
                 <Building2 size={18} />
                 Explore Facilities
               </Link>
+<<<<<<< HEAD
               {isAdmin && (
                 <Link to="/create-resource" className="secondary-action">
                   <Building2 size={18} />
                   Add Resource
                 </Link>
               )}
+=======
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
               <Link to="/allbookings" className="secondary-action">
                 <CalendarCheck size={18} />
                 View Bookings
@@ -171,7 +192,11 @@ function Home() {
                 <span>Live Modules</span>
               </div>
               <h3>Ticketing + Facilities + Booking</h3>
+<<<<<<< HEAD
               <p>Resource catalogue and booking workflow are connected through the homepage.</p>
+=======
+              <p>Booking is now connected with two quick actions in the module tile.</p>
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
             </div>
 
             <div className="panel-grid">

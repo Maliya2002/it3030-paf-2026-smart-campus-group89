@@ -9,6 +9,8 @@ function TicketDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -27,7 +29,11 @@ function TicketDetails() {
   const fetchComments = async () => {
     try {
       const response = await TicketService.getComments(id);
+<<<<<<< HEAD
       setComments(Array.isArray(response?.data) ? response.data : []);
+=======
+      setComments(Array.isArray(response.data) ? response.data : []);
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setComments([]);
     }
@@ -36,7 +42,11 @@ function TicketDetails() {
   const fetchAttachments = async () => {
     try {
       const response = await TicketService.getAttachments(id);
+<<<<<<< HEAD
       setAttachments(Array.isArray(response?.data) ? response.data : []);
+=======
+      setAttachments(Array.isArray(response.data) ? response.data : []);
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setAttachments([]);
     }
@@ -50,11 +60,17 @@ function TicketDetails() {
         TicketService.getComments(id),
         TicketService.getAttachments(id)
       ]);
+<<<<<<< HEAD
 
       setTicket(ticketResponse.data);
       setAssignedTechnician(ticketResponse.data?.assignedTechnician || '');
       setComments(Array.isArray(commentsResponse?.data) ? commentsResponse.data : []);
       setAttachments(Array.isArray(attachmentsResponse?.data) ? attachmentsResponse.data : []);
+=======
+      setTicket(ticketResponse.data);
+      setComments(Array.isArray(commentsResponse.data) ? commentsResponse.data : []);
+      setAttachments(Array.isArray(attachmentsResponse.data) ? attachmentsResponse.data : []);
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setError('Failed to load ticket details');
     } finally {

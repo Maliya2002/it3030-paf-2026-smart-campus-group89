@@ -12,7 +12,11 @@ import EditResource from './components/EditResource/EditResource';
 import CreateBooking from './components/CreateBooking/CreateBooking';
 import BookingList from './components/BookingList/BookingList';
 import BookingDetails from './components/BookingDetails/BookingDetails';
+<<<<<<< HEAD
 import { hasRole, isAuthenticated } from './utils/auth';
+=======
+import { isAuthenticated } from './utils/auth';
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -50,6 +54,7 @@ function App() {
             <Route path="/alltickets" element={<TicketList />} />
             <Route path="/ticketdetails/:id" element={<TicketDetails />} />
             <Route path="/resources" element={<ResourceList />} />
+<<<<<<< HEAD
             <Route path="/createbooking" element={<CreateBooking />} />
             <Route path="/allbookings" element={<BookingList />} />
             <Route path="/bookingdetails/:id" element={<BookingDetails />} />
@@ -59,6 +64,13 @@ function App() {
               <Route path="/create-resource" element={<CreateResource />} />
               <Route path="/edit-resource/:id" element={<EditResource />} />
             </Route>
+=======
+            <Route path="/create-resource" element={<CreateResource />} />
+            <Route path="/edit-resource/:id" element={<EditResource />} />
+            <Route path="/createbooking" element={<CreateBooking />} />
+            <Route path="/allbookings" element={<BookingList />} />
+            <Route path="/bookingdetails/:id" element={<BookingDetails />} />
+>>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
           </Route>
           <Route
             path="*"
