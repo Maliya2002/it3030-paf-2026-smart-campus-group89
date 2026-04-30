@@ -1,11 +1,11 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
-const API_BASE_URL = 'http://localhost:8080/api/tickets';
+const API_BASE_URL = '/api/tickets';
 
 const TicketService = {
   // Ticket CRUD Operations
   createTicket: (ticketData) => {
-    return axios.post(API_BASE_URL, ticketData);
+    return apiClient.post(API_BASE_URL, ticketData);
   },
 
   getAllTickets: (filters = {}) => {
@@ -17,45 +17,36 @@ const TicketService = {
     if (filters.reportedBy) params.append('reportedBy', filters.reportedBy);
     
     const query = params.toString() ? `?${params.toString()}` : '';
-    return axios.get(`${API_BASE_URL}${query}`);
+    return apiClient.get(`${API_BASE_URL}${query}`);
   },
 
   getTicketById: (id) => {
-    return axios.get(`${API_BASE_URL}/${id}`);
+    return apiClient.get(`${API_BASE_URL}/${id}`);
   },
 
   updateTicket: (id, ticketData, files = null) => {
-    const formData = new FormData();
-    formData.append('ticketData', JSON.stringify(ticketData));
-    
-    if (files) {
-      files.forEach(file => formData.append('file', file));
-    }
-    
-    return axios.put(`${API_BASE_URL}/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    return apiClient.put(`${API_BASE_URL}/${id}`, ticketData);
   },
 
   deleteTicket: (id) => {
-    return axios.delete(`${API_BASE_URL}/${id}`);
+    return apiClient.delete(`${API_BASE_URL}/${id}`);
   },
 
   // Comment Operations
   addComment: (ticketId, commentData) => {
-    return axios.post(`${API_BASE_URL}/${ticketId}/comments`, commentData);
+    return apiClient.post(`${API_BASE_URL}/${ticketId}/comments`, commentData);
   },
 
   getComments: (ticketId) => {
-    return axios.get(`${API_BASE_URL}/${ticketId}/comments`);
+    return apiClient.get(`${API_BASE_URL}/${ticketId}/comments`);
   },
 
   editComment: (ticketId, commentId, commentData) => {
-    return axios.put(`${API_BASE_URL}/${ticketId}/comments/${commentId}`, commentData);
+    return apiClient.put(`${API_BASE_URL}/${ticketId}/comments/${commentId}`, commentData);
   },
 
   deleteComment: (ticketId, commentId, commentedBy) => {
-    return axios.delete(`${API_BASE_URL}/${ticketId}/comments/${commentId}?commentedBy=${commentedBy}`);
+    return apiClient.delete(`${API_BASE_URL}/${ticketId}/comments/${commentId}?commentedBy=${commentedBy}`);
   },
 
   // Attachment Operations
@@ -64,21 +55,21 @@ const TicketService = {
     files.forEach(file => formData.append('files', file));
     formData.append('uploadedBy', uploadedBy);
     
-    return axios.post(`${API_BASE_URL}/${ticketId}/attachments`, formData, {
+    return apiClient.post(`${API_BASE_URL}/${ticketId}/attachments`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
   },
 
   getAttachments: (ticketId) => {
-    return axios.get(`${API_BASE_URL}/${ticketId}/attachments`);
+    return apiClient.get(`${API_BASE_URL}/${ticketId}/attachments`);
   },
 
   deleteAttachment: (ticketId, attachmentId) => {
-    return axios.delete(`${API_BASE_URL}/${ticketId}/attachments/${attachmentId}`);
+    return apiClient.delete(`${API_BASE_URL}/${ticketId}/attachments/${attachmentId}`);
   },
 
   downloadAttachment: (filename) => {
-    return axios.get(`${API_BASE_URL}/uploads/${filename}`, {
+    return apiClient.get(`${API_BASE_URL}/uploads/${filename}`, {
       responseType: 'blob'
     });
   }

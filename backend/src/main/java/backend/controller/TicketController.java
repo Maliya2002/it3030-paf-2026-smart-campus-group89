@@ -31,12 +31,15 @@ import backend.exception.CommentNotFoundException;
 import backend.exception.TicketNotFoundException;
 import backend.model.AttachmentModel;
 import backend.model.CommentModel;
+import backend.model.NotificationType;
 import backend.model.TicketModel;
 import backend.model.TicketPriority;
 import backend.model.TicketStatus;
 import backend.repository.AttachmentRepository;
 import backend.repository.CommentRepository;
 import backend.repository.TicketRepository;
+import backend.security.SecurityUtils;
+import backend.service.NotificationService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -50,6 +53,8 @@ public class TicketController {
 
     @Autowired
     private AttachmentRepository attachmentRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     private final String UPLOAD_DIR = "src/main/uploads/attachments/";
 
@@ -61,6 +66,9 @@ public class TicketController {
         try {
             if (newTicket.getTicketId() == null || newTicket.getTicketId().isEmpty()) {
                 newTicket.setTicketId("TKT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            }
+            if (newTicket.getReportedBy() == null || newTicket.getReportedBy().isBlank()) {
+                newTicket.setReportedBy(SecurityUtils.currentUserEmail());
             }
             TicketModel savedTicket = ticketRepository.save(newTicket);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedTicket);
@@ -136,10 +144,17 @@ public class TicketController {
             if (updatedTicketData.getDescription() != null) {
                 existingTicket.setDescription(updatedTicketData.getDescription());
             }
+            TicketStatus oldStatus = existingTicket.getStatus();
             if (updatedTicketData.getStatus() != null) {
                 existingTicket.setStatus(updatedTicketData.getStatus());
                 if (updatedTicketData.getStatus() == TicketStatus.RESOLVED) {
                     existingTicket.setResolvedAt(LocalDateTime.now());
+                }
+                if (updatedTicketData.getStatus() == TicketStatus.CLOSED) {
+                    existingTicket.setClosedAt(LocalDateTime.now());
+                    if (existingTicket.getResolvedAt() == null) {
+                        existingTicket.setResolvedAt(LocalDateTime.now());
+                    }
                 }
             }
             if (updatedTicketData.getPriority() != null) {
@@ -155,7 +170,26 @@ public class TicketController {
                 existingTicket.setLocation(updatedTicketData.getLocation());
             }
 
+            // First response is tracked on first meaningful staff action:
+            // assignment or progress/status movement beyond OPEN.
+            if (existingTicket.getFirstRespondedAt() == null) {
+                boolean hasAssignee = existingTicket.getAssignedTechnician() != null
+                        && !existingTicket.getAssignedTechnician().isBlank();
+                boolean progressed = existingTicket.getStatus() != null
+                        && existingTicket.getStatus() != TicketStatus.OPEN;
+                if (hasAssignee || progressed) {
+                    existingTicket.setFirstRespondedAt(LocalDateTime.now());
+                }
+            }
+
             TicketModel savedTicket = ticketRepository.save(existingTicket);
+            if (updatedTicketData.getStatus() != null && oldStatus != updatedTicketData.getStatus()) {
+                notificationService.create(
+                        savedTicket.getReportedBy(),
+                        NotificationType.TICKET_STATUS_CHANGED,
+                        "Ticket " + savedTicket.getTicketId() + " status changed to " + savedTicket.getStatus() + ".",
+                        savedTicket.getTicketId());
+            }
             return ResponseEntity.ok(savedTicket);
         } catch (TicketNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -210,7 +244,26 @@ public class TicketController {
                     .orElseThrow(() -> new TicketNotFoundException(id));
 
             newComment.setTicket(ticket);
+            if (newComment.getCommentedBy() == null || newComment.getCommentedBy().isBlank()) {
+                newComment.setCommentedBy(SecurityUtils.currentUserEmail());
+            }
             CommentModel savedComment = commentRepository.save(newComment);
+
+            // First response can also be captured on first non-reporter comment.
+            if (ticket.getFirstRespondedAt() == null
+                    && savedComment.getCommentedBy() != null
+                    && !savedComment.getCommentedBy().equalsIgnoreCase(ticket.getReportedBy())) {
+                ticket.setFirstRespondedAt(LocalDateTime.now());
+                ticketRepository.save(ticket);
+            }
+
+            if (!savedComment.getCommentedBy().equalsIgnoreCase(ticket.getReportedBy())) {
+                notificationService.create(
+                        ticket.getReportedBy(),
+                        NotificationType.TICKET_COMMENT,
+                        "New comment on your ticket " + ticket.getTicketId() + " by " + savedComment.getCommentedBy() + ".",
+                        ticket.getTicketId());
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
         } catch (TicketNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -2,6 +2,8 @@ package backend.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,6 +23,7 @@ public class CommentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id", nullable = false)
     private TicketModel ticket;
@@ -65,6 +68,7 @@ public class CommentModel {
         this.id = id;
     }
 
+    @JsonIgnore
     public TicketModel getTicket() {
         return ticket;
     }

@@ -1,28 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TicketService from '../../services/TicketService';
 import '../styles/TicketDetails.css';
-import { ArrowLeft, AlertCircle, Loader, Trash2, Edit2, Download } from 'lucide-react';
+import { ArrowLeft, AlertCircle, Loader, Trash2 } from 'lucide-react';
+import { getCurrentUser } from '../../utils/auth';
 
 function TicketDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [ticket, setTicket] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [activeTab, setActiveTab] = useState('details');
-  const [userEmail, setUserEmail] = useState('');
+  const [assignedTechnician, setAssignedTechnician] = useState('');
+  const [savingAssignment, setSavingAssignment] = useState(false);
+  const [deletingTicket, setDeletingTicket] = useState(false);
 
   useEffect(() => {
     fetchTicketDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await TicketService.getComments(id);
+      setComments(Array.isArray(response?.data) ? response.data : []);
+    } catch (err) {
+      setComments([]);
+    }
+  };
+
+  const fetchAttachments = async () => {
+    try {
+      const response = await TicketService.getAttachments(id);
+      setAttachments(Array.isArray(response?.data) ? response.data : []);
+    } catch (err) {
+      setAttachments([]);
+    }
+  };
 
   const fetchTicketDetails = async () => {
     setLoading(true);
     try {
-      const response = await TicketService.getTicketById(id);
-      setTicket(response.data);
+      const [ticketResponse, commentsResponse, attachmentsResponse] = await Promise.all([
+        TicketService.getTicketById(id),
+        TicketService.getComments(id),
+        TicketService.getAttachments(id)
+      ]);
+
+      setTicket(ticketResponse.data);
+      setAssignedTechnician(ticketResponse.data?.assignedTechnician || '');
+      setComments(Array.isArray(commentsResponse?.data) ? commentsResponse.data : []);
+      setAttachments(Array.isArray(attachmentsResponse?.data) ? attachmentsResponse.data : []);
     } catch (err) {
       setError('Failed to load ticket details');
     } finally {
@@ -32,7 +64,8 @@ function TicketDetails() {
 
   const handleStatusChange = async (newStatus) => {
     try {
-      const updatedData = { ...ticket, status: newStatus };
+      setError('');
+      const updatedData = { status: newStatus };
       await TicketService.updateTicket(id, updatedData);
       setSuccessMessage('Status updated successfully!');
       fetchTicketDetails();
@@ -41,14 +74,34 @@ function TicketDetails() {
     }
   };
 
-  const handleAssignTechnician = async (technician) => {
+  const handleAssignmentSave = async () => {
     try {
-      const updatedData = { ...ticket, assignedTechnician: technician };
-      await TicketService.updateTicket(id, updatedData);
-      setSuccessMessage('Technician assigned successfully!');
+      setSavingAssignment(true);
+      setError('');
+      const cleanedTechnician = assignedTechnician.trim();
+      await TicketService.updateTicket(id, {
+        assignedTechnician: cleanedTechnician || null
+      });
+      setSuccessMessage(cleanedTechnician ? 'Technician assigned successfully!' : 'Technician assignment cleared.');
       fetchTicketDetails();
     } catch (err) {
-      setError('Failed to assign technician');
+      setError('Failed to update assigned technician');
+    } finally {
+      setSavingAssignment(false);
+    }
+  };
+
+  const handleDeleteTicket = async () => {
+    if (!window.confirm('Delete this ticket permanently?')) return;
+    try {
+      setDeletingTicket(true);
+      setError('');
+      await TicketService.deleteTicket(id);
+      navigate('/alltickets');
+    } catch (err) {
+      setError('Failed to delete ticket');
+    } finally {
+      setDeletingTicket(false);
     }
   };
 
@@ -110,6 +163,19 @@ function TicketDetails() {
     });
   };
 
+  const formatDuration = (minutes) => {
+    if (minutes === null || minutes === undefined) return 'Pending';
+    const safe = Number(minutes);
+    if (Number.isNaN(safe) || safe < 0) return 'N/A';
+    if (safe < 60) return `${safe} minutes`;
+    const hours = Math.floor(safe / 60);
+    const remainingMinutes = safe % 60;
+    if (hours < 24) return `${hours} hours ${remainingMinutes} minutes`;
+    const days = Math.floor(hours / 24);
+    const remainingHours = hours % 24;
+    return `${days} days ${remainingHours} hours ${remainingMinutes} minutes`;
+  };
+
   return (
     <div className="ticket-details-container">
       <div className="ticket-details-header">
@@ -145,23 +211,23 @@ function TicketDetails() {
           </div>
 
           <div className="tabs">
-            <button 
+            <button
               className={`tab ${activeTab === 'details' ? 'active' : ''}`}
               onClick={() => setActiveTab('details')}
             >
               Details
             </button>
-            <button 
+            <button
               className={`tab ${activeTab === 'comments' ? 'active' : ''}`}
               onClick={() => setActiveTab('comments')}
             >
-              Comments ({ticket.comments?.length || 0})
+              Comments ({comments.length})
             </button>
-            <button 
+            <button
               className={`tab ${activeTab === 'attachments' ? 'active' : ''}`}
               onClick={() => setActiveTab('attachments')}
             >
-              Attachments ({ticket.attachments?.length || 0})
+              Attachments ({attachments.length})
             </button>
           </div>
 
@@ -193,6 +259,20 @@ function TicketDetails() {
                   <label>Last Updated</label>
                   <div>{formatDate(ticket.updatedAt)}</div>
                 </div>
+                <div className="detail-item">
+                  <label>Time to First Response</label>
+                  <div>{formatDuration(ticket.timeToFirstResponseMinutes)}</div>
+                </div>
+                <div className="detail-item">
+                  <label>Time to Resolution</label>
+                  <div>{formatDuration(ticket.timeToResolutionMinutes)}</div>
+                </div>
+                {ticket.firstRespondedAt && (
+                  <div className="detail-item">
+                    <label>First Responded</label>
+                    <div>{formatDate(ticket.firstRespondedAt)}</div>
+                  </div>
+                )}
                 {ticket.resolvedAt && (
                   <div className="detail-item">
                     <label>Resolved</label>
@@ -204,11 +284,11 @@ function TicketDetails() {
           )}
 
           {activeTab === 'comments' && (
-            <CommentsSection ticketId={id} comments={ticket.comments} onUpdate={fetchTicketDetails} />
+            <CommentsSection ticketId={id} comments={comments} onUpdate={fetchComments} />
           )}
 
           {activeTab === 'attachments' && (
-            <AttachmentsSection ticketId={id} attachments={ticket.attachments} onUpdate={fetchTicketDetails} />
+            <AttachmentsSection ticketId={id} attachments={attachments} onUpdate={fetchAttachments} />
           )}
         </div>
 
@@ -217,7 +297,7 @@ function TicketDetails() {
             <h3>Actions</h3>
             <div className="status-selector">
               <label>Change Status</label>
-              <select 
+              <select
                 value={ticket.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="selector"
@@ -232,13 +312,33 @@ function TicketDetails() {
 
             <div className="assignment-section">
               <label>Assigned Technician</label>
-              {ticket.assignedTechnician ? (
-                <div className="assigned-tech">
-                  <div>{ticket.assignedTechnician}</div>
-                </div>
-              ) : (
-                <div>Not assigned</div>
-              )}
+              <input
+                type="email"
+                placeholder="technician@campus.com"
+                value={assignedTechnician}
+                onChange={(e) => setAssignedTechnician(e.target.value)}
+                className="selector"
+              />
+              <button
+                type="button"
+                className="btn btn-primary action-btn"
+                onClick={handleAssignmentSave}
+                disabled={savingAssignment}
+              >
+                {savingAssignment ? 'Saving...' : 'Save Assignment'}
+              </button>
+            </div>
+
+            <div className="assignment-section">
+              <label>Delete Ticket</label>
+              <button
+                type="button"
+                className="btn btn-danger action-btn"
+                onClick={handleDeleteTicket}
+                disabled={deletingTicket}
+              >
+                {deletingTicket ? 'Deleting...' : 'Delete Ticket'}
+              </button>
             </div>
           </div>
 
@@ -272,8 +372,9 @@ function TicketDetails() {
 }
 
 function CommentsSection({ ticketId, comments, onUpdate }) {
+  const currentUser = getCurrentUser();
   const [commentText, setCommentText] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(currentUser?.email || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -283,7 +384,6 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
       setError('Please fill in both fields');
       return;
     }
-
     setLoading(true);
     try {
       await TicketService.addComment(ticketId, {
@@ -291,7 +391,6 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
         commentText: commentText
       });
       setCommentText('');
-      setUserEmail('');
       onUpdate();
     } catch (err) {
       setError('Failed to add comment');
@@ -319,7 +418,7 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
               <div className="comment-header">
                 <span className="comment-author">{comment.commentedBy}</span>
                 <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
-                <button 
+                <button
                   className="comment-delete-btn"
                   onClick={() => handleDeleteComment(comment.id, comment.commentedBy)}
                   title="Delete comment"
@@ -360,15 +459,24 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
 }
 
 function AttachmentsSection({ ticketId, attachments, onUpdate }) {
+  const currentUser = getCurrentUser();
+  const fileInputRef = useRef(null);
   const [files, setFiles] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState(currentUser?.email || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleFileSelect = (e) => {
     const selectedFiles = Array.from(e.target.files);
+    const invalidType = selectedFiles.find((file) => !file.type.startsWith('image/'));
+    if (invalidType) {
+      setError('Only image files are allowed');
+      setFiles(null);
+      return;
+    }
     if (selectedFiles.length + (attachments?.length || 0) > 3) {
       setError('Maximum 3 attachments allowed per ticket');
+      setFiles(null);
       return;
     }
     setFiles(selectedFiles);
@@ -381,13 +489,11 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
       setError('Please select files and enter your email');
       return;
     }
-
     setLoading(true);
     try {
       await TicketService.uploadAttachments(ticketId, files, userEmail);
       setFiles(null);
-      setUserEmail('');
-      document.querySelector('input[type="file"]').value = '';
+      if (fileInputRef.current) fileInputRef.current.value = '';
       onUpdate();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to upload attachments');
@@ -413,7 +519,15 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
           <div className="attachments-grid">
             {attachments.map(attachment => (
               <div key={attachment.id} className="attachment-card">
-                <div className="attachment-icon">📎</div>
+                {attachment.filePath ? (
+                  <img
+                    src={`http://localhost:8080/api/tickets/uploads/${attachment.filePath}`}
+                    alt={attachment.fileName}
+                    className="attachment-preview"
+                  />
+                ) : (
+                  <div className="attachment-icon">📎</div>
+                )}
                 <div className="attachment-info">
                   <h4>{attachment.fileName}</h4>
                   <p className="file-type">{attachment.fileType}</p>
@@ -446,15 +560,17 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
         />
         <div className="file-input-wrapper">
           <input
+            id={`attachment-input-${ticketId}`}
+            ref={fileInputRef}
             type="file"
             multiple
             onChange={handleFileSelect}
             className="file-input"
             accept="image/*"
           />
-          <span className="file-input-label">
+          <label htmlFor={`attachment-input-${ticketId}`} className="file-input-label">
             {files ? `${files.length} file(s) selected` : 'Choose images (max 3)'}
-          </span>
+          </label>
         </div>
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Uploading...' : 'Upload Attachments'}
@@ -465,3 +581,6 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
 }
 
 export default TicketDetails;
+
+
+
