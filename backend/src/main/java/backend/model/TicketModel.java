@@ -65,6 +65,12 @@ public class TicketModel {
     @Column
     private LocalDateTime resolvedAt;
 
+    @Column
+    private LocalDateTime closedAt;          // ← ADDED
+
+    @Column
+    private LocalDateTime firstRespondedAt;  // ← ADDED
+
     @JsonIgnore
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentModel> comments = new ArrayList<>();
@@ -89,7 +95,7 @@ public class TicketModel {
 
     public TicketModel() {}
 
-    public TicketModel(String ticketId, String title, String description, TicketPriority priority, 
+    public TicketModel(String ticketId, String title, String description, TicketPriority priority,
                        String reportedBy, String category, String location) {
         this.ticketId = ticketId;
         this.title = title;
@@ -102,6 +108,7 @@ public class TicketModel {
     }
 
     // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -206,6 +213,22 @@ public class TicketModel {
         this.resolvedAt = resolvedAt;
     }
 
+    public LocalDateTime getClosedAt() {          // ← ADDED
+        return closedAt;
+    }
+
+    public void setClosedAt(LocalDateTime closedAt) {   // ← ADDED
+        this.closedAt = closedAt;
+    }
+
+    public LocalDateTime getFirstRespondedAt() {        // ← ADDED
+        return firstRespondedAt;
+    }
+
+    public void setFirstRespondedAt(LocalDateTime firstRespondedAt) {  // ← ADDED
+        this.firstRespondedAt = firstRespondedAt;
+    }
+
     @JsonIgnore
     public List<CommentModel> getComments() {
         return comments;
@@ -224,3 +247,7 @@ public class TicketModel {
         this.attachments = attachments;
     }
 }
+
+
+
+

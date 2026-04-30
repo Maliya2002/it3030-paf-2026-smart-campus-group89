@@ -1,17 +1,11 @@
-<<<<<<< HEAD
-=======
-/* 🔹 BACKGROUND */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* BACKGROUND */
 body {
   background: linear-gradient(135deg, #5f6ad4, #7b3dbb);
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 MAIN CONTAINER */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* MAIN CONTAINER */
 .container {
   padding: 30px;
   color: white;
@@ -19,7 +13,7 @@ body {
   margin: auto;
 }
 
-<<<<<<< HEAD
+/* CREATE RESOURCE PAGE */
 .resource-page {
   min-height: 100vh;
   display: grid;
@@ -92,18 +86,13 @@ body {
   }
 }
 
-=======
-/* 🔹 TITLE */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* TITLE */
 .title {
   text-align: center;
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔍 SEARCH BOX */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* SEARCH BOX */
 .search-box select {
   padding: 14px;
   font-size: 12px;
@@ -113,35 +102,22 @@ body {
   width: 220px;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 INPUTS (SEARCH + FORM) */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* INPUTS */
 .search-box input,
 .form input,
 .form select {
   padding: 14px;
   font-size: 12px;
-<<<<<<< HEAD
   border-radius: 12px;
-=======
-  border-radius: 12px;   /* ✅ rounded */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
   border: none;
   outline: none;
   width: 220px;
 }
 
-<<<<<<< HEAD
+/* RESPONSIVE */
 @media (max-width: 770px) {
   .search-box {
     flex-direction: column;
-=======
-/* 🔹 RESPONSIVE FIX */
-@media (max-width: 770px) {
-  .search-box {
-    flex-direction: column;   /* ✅ fixed (was wrong) */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
     align-items: stretch;
   }
 
@@ -150,18 +126,11 @@ body {
   }
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 SEARCH BUTTON RIGHT */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
 .search-box button {
   margin-left: auto;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 BUTTON STYLE */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* BUTTON */
 .btn {
   padding: 12px 16px;
   background: #7f5af0;
@@ -176,30 +145,21 @@ body {
   background-color: #6c4ce0;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 TOP ACTIONS (Add + PDF) */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* TOP ACTIONS */
 .top-actions {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 GRID */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 15px;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 CARD */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* CARD */
 .card {
   background: rgb(242, 241, 244);
   color: rgb(40, 40, 40);
@@ -209,20 +169,14 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 ACTION BUTTONS */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* ACTION BUTTONS */
 .actions {
   display: flex;
   gap: 10px;
   margin-top: 15px;
 }
 
-<<<<<<< HEAD
-=======
-/* ✏️ EDIT BUTTON */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* EDIT BUTTON */
 .edit {
   display: flex;
   align-items: center;
@@ -240,10 +194,7 @@ body {
   background: #d97706;
 }
 
-<<<<<<< HEAD
-=======
-/* 🗑 DELETE BUTTON */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* DELETE BUTTON */
 .delete {
   display: flex;
   align-items: center;
@@ -261,10 +212,7 @@ body {
   background: #dc2626;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 STATUS BADGE */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* STATUS BADGE */
 .status {
   display: inline-block;
   margin-top: 8px;
@@ -284,19 +232,13 @@ body {
   color: white;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 FORM */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* FORM */
 .form {
   max-width: 400px;
   margin: auto;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 FORM INPUTS FULL WIDTH */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* FORM INPUTS FULL WIDTH */
 .form input,
 .form select {
   display: block;
@@ -305,26 +247,19 @@ body {
   width: 100%;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 ERROR TEXT */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* ERROR TEXT */
 .error {
   color: red;
   font-size: 14px;
   margin-bottom: 5px;
 }
 
-<<<<<<< HEAD
-=======
-/* 🔹 EMPTY TEXT */
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+/* EMPTY TEXT */
 .no-data {
   text-align: center;
   color: white;
   margin-top: 20px;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/Facilities-SASMITHA-P-M-V
+
+
+

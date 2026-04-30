@@ -18,8 +18,6 @@ function TicketDetails() {
   const [assignedTechnician, setAssignedTechnician] = useState('');
   const [savingAssignment, setSavingAssignment] = useState(false);
   const [deletingTicket, setDeletingTicket] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [attachments, setAttachments] = useState([]);
 
   useEffect(() => {
     fetchTicketDetails();
@@ -29,11 +27,7 @@ function TicketDetails() {
   const fetchComments = async () => {
     try {
       const response = await TicketService.getComments(id);
-<<<<<<< HEAD
       setComments(Array.isArray(response?.data) ? response.data : []);
-=======
-      setComments(Array.isArray(response.data) ? response.data : []);
->>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setComments([]);
     }
@@ -42,11 +36,7 @@ function TicketDetails() {
   const fetchAttachments = async () => {
     try {
       const response = await TicketService.getAttachments(id);
-<<<<<<< HEAD
       setAttachments(Array.isArray(response?.data) ? response.data : []);
-=======
-      setAttachments(Array.isArray(response.data) ? response.data : []);
->>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setAttachments([]);
     }
@@ -60,17 +50,11 @@ function TicketDetails() {
         TicketService.getComments(id),
         TicketService.getAttachments(id)
       ]);
-<<<<<<< HEAD
 
       setTicket(ticketResponse.data);
       setAssignedTechnician(ticketResponse.data?.assignedTechnician || '');
       setComments(Array.isArray(commentsResponse?.data) ? commentsResponse.data : []);
       setAttachments(Array.isArray(attachmentsResponse?.data) ? attachmentsResponse.data : []);
-=======
-      setTicket(ticketResponse.data);
-      setComments(Array.isArray(commentsResponse.data) ? commentsResponse.data : []);
-      setAttachments(Array.isArray(attachmentsResponse.data) ? attachmentsResponse.data : []);
->>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
     } catch (err) {
       setError('Failed to load ticket details');
     } finally {
@@ -227,19 +211,19 @@ function TicketDetails() {
           </div>
 
           <div className="tabs">
-            <button 
+            <button
               className={`tab ${activeTab === 'details' ? 'active' : ''}`}
               onClick={() => setActiveTab('details')}
             >
               Details
             </button>
-            <button 
+            <button
               className={`tab ${activeTab === 'comments' ? 'active' : ''}`}
               onClick={() => setActiveTab('comments')}
             >
               Comments ({comments.length})
             </button>
-            <button 
+            <button
               className={`tab ${activeTab === 'attachments' ? 'active' : ''}`}
               onClick={() => setActiveTab('attachments')}
             >
@@ -313,7 +297,7 @@ function TicketDetails() {
             <h3>Actions</h3>
             <div className="status-selector">
               <label>Change Status</label>
-              <select 
+              <select
                 value={ticket.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
                 className="selector"
@@ -400,7 +384,6 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
       setError('Please fill in both fields');
       return;
     }
-
     setLoading(true);
     try {
       await TicketService.addComment(ticketId, {
@@ -435,7 +418,7 @@ function CommentsSection({ ticketId, comments, onUpdate }) {
               <div className="comment-header">
                 <span className="comment-author">{comment.commentedBy}</span>
                 <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
-                <button 
+                <button
                   className="comment-delete-btn"
                   onClick={() => handleDeleteComment(comment.id, comment.commentedBy)}
                   title="Delete comment"
@@ -506,14 +489,11 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
       setError('Please select files and enter your email');
       return;
     }
-
     setLoading(true);
     try {
       await TicketService.uploadAttachments(ticketId, files, userEmail);
       setFiles(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      if (fileInputRef.current) fileInputRef.current.value = '';
       onUpdate();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to upload attachments');
@@ -601,3 +581,6 @@ function AttachmentsSection({ ticketId, attachments, onUpdate }) {
 }
 
 export default TicketDetails;
+
+
+

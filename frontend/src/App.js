@@ -6,18 +6,13 @@ import Home from './components/Home/Home';
 import CreateTicket from './components/CreateTicket/CreateTicket';
 import TicketList from './components/TicketList/TicketList';
 import TicketDetails from './components/TicketDetails/TicketDetails';
-<<<<<<< HEAD
 import ResourceList from './components/ResourceList/ResourceList';
 import CreateResource from './components/CreateResource/CreateResource';
 import EditResource from './components/EditResource/EditResource';
 import CreateBooking from './components/CreateBooking/CreateBooking';
 import BookingList from './components/BookingList/BookingList';
 import BookingDetails from './components/BookingDetails/BookingDetails';
-<<<<<<< HEAD
 import { hasRole, isAuthenticated } from './utils/auth';
-=======
-import { isAuthenticated } from './utils/auth';
->>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
 
 function ProtectedRoute() {
   const location = useLocation();
@@ -35,18 +30,12 @@ function AdminRoute() {
   }
   return <Outlet />;
 }
-=======
-import ResourceList from "./components/ResourceList/ResourceList";
-import CreateResource from "./components/CreateResource/CreateResource";
-import EditResource from "./components/EditResource/EditResource";
->>>>>>> origin/Facilities-SASMITHA-P-M-V
 
 function App() {
   return (
     <div>
       <React.Fragment>
         <Routes>
-<<<<<<< HEAD
           <Route
             path="/"
             element={isAuthenticated() ? <Navigate to="/home" replace /> : <SignIn />}
@@ -55,43 +44,30 @@ function App() {
             path="/signup"
             element={isAuthenticated() ? <Navigate to="/home" replace /> : <SignUp />}
           />
+
+          {/* Protected routes — must be logged in */}
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<Home />} />
             <Route path="/createticket" element={<CreateTicket />} />
             <Route path="/alltickets" element={<TicketList />} />
             <Route path="/ticketdetails/:id" element={<TicketDetails />} />
             <Route path="/resources" element={<ResourceList />} />
-<<<<<<< HEAD
             <Route path="/createbooking" element={<CreateBooking />} />
             <Route path="/allbookings" element={<BookingList />} />
             <Route path="/bookingdetails/:id" element={<BookingDetails />} />
-          </Route>
-          <Route element={<ProtectedRoute />}>
+
+            {/* Admin-only routes — must be logged in AND have ADMIN role */}
             <Route element={<AdminRoute />}>
               <Route path="/create-resource" element={<CreateResource />} />
               <Route path="/edit-resource/:id" element={<EditResource />} />
             </Route>
-=======
-            <Route path="/create-resource" element={<CreateResource />} />
-            <Route path="/edit-resource/:id" element={<EditResource />} />
-            <Route path="/createbooking" element={<CreateBooking />} />
-            <Route path="/allbookings" element={<BookingList />} />
-            <Route path="/bookingdetails/:id" element={<BookingDetails />} />
->>>>>>> f23bae5a5ecc0b9d3f431dbbf88d30e011ac1b5b
           </Route>
+
+          {/* Catch-all fallback */}
           <Route
             path="*"
             element={<Navigate to={isAuthenticated() ? '/home' : '/'} replace />}
           />
-=======
-          <Route path="/" element={<Home />} />
-          <Route path="/createticket" element={<CreateTicket />} />
-          <Route path="/alltickets" element={<TicketList />} />
-          <Route path="/ticketdetails/:id" element={<TicketDetails />} />
-          <Route path="/resources" element={<ResourceList />} />
-          <Route path="/edit-resource/:id" element={<EditResource />} />
-          <Route path="/create-resource" element={<CreateResource />} />
->>>>>>> origin/Facilities-SASMITHA-P-M-V
         </Routes>
       </React.Fragment>
     </div>
@@ -99,3 +75,6 @@ function App() {
 }
 
 export default App;
+
+
+

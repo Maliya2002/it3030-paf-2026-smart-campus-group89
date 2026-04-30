@@ -1,13 +1,16 @@
 package backend.controller;
+
 import backend.service.PdfService;
 import jakarta.validation.Valid;
 import backend.model.Resource;
 import backend.repository.ResourceRepository;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
-import java.io.ByteArrayInputStream;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -27,31 +30,47 @@ public class ResourceController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String status
     ) {
+
+        List<Resource> list;
+
         if (type == null && location == null) {
-            return repo.findAll();
+            list = repo.findAll();
+        } else {
+            list = repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
+                    type == null ? "" : type,
+                    location == null ? "" : location
+            );
         }
-        return repo.findByTypeContainingIgnoreCaseAndLocationContainingIgnoreCase(
-                type == null ? "" : type,
-                location == null ? "" : location,
-                status == null ? "" : status
-        );
+
+        // Optional status filtering
+        if (status != null && !status.isEmpty()) {
+            list = list.stream()
+                    .filter(r -> r.getStatus().equalsIgnoreCase(status))
+                    .collect(Collectors.toList());
+        }
+
+        return list;
     }
-    //PDF
+
+    // PDF DOWNLOAD
     @GetMapping("/pdf")
     public ResponseEntity<byte[]> downloadPdf() {
 
         List<Resource> list = repo.findAll();
-
         ByteArrayInputStream pdf = PdfService.generate(list);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=resources.pdf");
 
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdf.readAllBytes());
+        try {
+            return ResponseEntity
+                    .ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(pdf.readAllBytes());
+        } catch (Exception e) {
+            throw new RuntimeException("Error generating PDF");
+        }
     }
 
     // GET ONE
@@ -62,7 +81,7 @@ public class ResourceController {
 
     // CREATE
     @PostMapping
-    public Resource create(@Valid@RequestBody Resource r) {
+    public Resource create(@Valid @RequestBody Resource r) {
         r.setStatus("ACTIVE");
         return repo.save(r);
     }
@@ -92,3 +111,6 @@ public class ResourceController {
         return repo.save(r);
     }
 }
+
+
+
