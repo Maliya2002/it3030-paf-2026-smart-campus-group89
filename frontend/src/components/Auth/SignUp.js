@@ -10,7 +10,8 @@ function SignUp() {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'USER'
   });
   const [error, setError] = useState('');
 
@@ -94,6 +95,18 @@ function SignUp() {
               onChange={handleChange}
               placeholder="Enter your email"
             />
+          </label>
+
+          <label className="auth-field">
+            <span>Role</span>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="USER">Campus User</option>
+              <option value="ADMIN">Admin</option>
+            </select>
           </label>
 
           <label className="auth-field">

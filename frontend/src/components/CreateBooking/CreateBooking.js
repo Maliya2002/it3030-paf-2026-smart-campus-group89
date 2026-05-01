@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BookingService from '../../services/BookingService';
 import '../styles/CreateTicket.css';
 import { ArrowLeft, AlertCircle, Calendar, Clock, Users } from 'lucide-react';
+import { getResources } from '../../services/ResourceService';
+import { getCurrentUser } from '../../utils/auth';
 
 function CreateBooking() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [resources, setResources] = useState([]);
+  const currentUser = getCurrentUser();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -18,33 +22,36 @@ function CreateBooking() {
     bookingDate: '',
     startTime: '',
     endTime: '',
-    requestedBy: '',
+    requestedBy: currentUser?.email || '',
     location: '',
     attendees: 1,
     notes: ''
   });
 
-  const resourceTypes = [
-    'Classroom',
-    'Lab',
-    'Meeting Room',
-    'Auditorium',
-    'Sports Facility',
-    'Library Room',
-    'Event Space',
-    'Other'
-  ];
+  useEffect(() => {
+    getResources('', '', 'ACTIVE')
+      .then((res) => setResources(res.data || []))
+      .catch(() => setError('Failed to load active resources'));
+  }, []);
 
-  const resourceNames = {
-    'Classroom': ['Room 101', 'Room 102', 'Room 103', 'Room 104', 'Room 201', 'Room 202'],
-    'Lab': ['Computer Lab A', 'Computer Lab B', 'Science Lab 1', 'Science Lab 2'],
-    'Meeting Room': ['Meeting Room A', 'Meeting Room B', 'Conference Room 1', 'Conference Room 2'],
-    'Auditorium': ['Main Auditorium', 'Mini Auditorium', 'Lecture Hall 1'],
-    'Sports Facility': ['Gymnasium', 'Swimming Pool', 'Tennis Court', 'Basketball Court'],
-    'Library Room': ['Study Room 1', 'Study Room 2', 'Discussion Room A', 'Discussion Room B'],
-    'Event Space': ['Main Hall', 'Exhibition Hall', 'Open Air Theater'],
-    'Other': ['Other Resource']
-  };
+  const resourceTypes = useMemo(
+    () => ([
+      { value: "CLASSROOM", label: "Classroom" },
+      { value: "LAB", label: "Lab" },
+      { value: "MEETING_ROOM", label: "Meeting Room" },
+      { value: "AUDITORIUM", label: "Auditorium" },
+      { value: "SPORTS_FACILITY", label: "Sports Facility" },
+      { value: "LIBRARY_ROOM", label: "Library Room" },
+      { value: "EVENT_SPACE", label: "Event Space" },
+      { value: "OTHER", label: "Other" }
+    ]),
+    []
+  );
+
+  const availableResources = useMemo(
+    () => resources.filter((resource) => String(resource.type || '') === String(formData.resourceType || '')),
+    [resources, formData.resourceType]
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +64,17 @@ function CreateBooking() {
       setFormData(prev => ({
         ...prev,
         resourceType: value,
-        resourceName: ''
+        resourceName: '',
+        location: ''
+      }));
+    }
+
+    if (name === 'resourceName') {
+      const selectedResource = resources.find((resource) => resource.name === value);
+      setFormData(prev => ({
+        ...prev,
+        resourceName: value,
+        location: selectedResource?.location || ''
       }));
     }
   };
@@ -81,6 +98,11 @@ function CreateBooking() {
     }
     if (!formData.resourceName) {
       setError('Resource name is required');
+      return;
+    }
+    const selectedResource = resources.find((resource) => resource.name === formData.resourceName);
+    if (!selectedResource) {
+      setError('Selected resource is unavailable');
       return;
     }
     if (!formData.bookingDate) {
@@ -114,6 +136,7 @@ function CreateBooking() {
     try {
       const bookingPayload = {
         ...formData,
+        location: selectedResource.location,
         attendees: parseInt(formData.attendees) || 1
       };
 
@@ -194,7 +217,7 @@ function CreateBooking() {
                 >
                   <option value="">-- Select Type --</option>
                   {resourceTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
+                    <option key={type.value} value={type.value}>{type.label}</option>
                   ))}
                 </select>
               </div>
@@ -210,8 +233,8 @@ function CreateBooking() {
                   disabled={!formData.resourceType}
                 >
                   <option value="">-- Select Resource --</option>
-                  {formData.resourceType && resourceNames[formData.resourceType]?.map(name => (
-                    <option key={name} value={name}>{name}</option>
+                  {availableResources.map((resource) => (
+                    <option key={resource.id} value={resource.name}>{resource.name}</option>
                   ))}
                 </select>
               </div>
@@ -273,8 +296,8 @@ function CreateBooking() {
                   id="location"
                   name="location"
                   value={formData.location}
-                  onChange={handleInputChange}
-                  placeholder="Enter specific location details"
+                  readOnly
+                  placeholder="Auto-filled from selected resource"
                   className="form-input"
                 />
               </div>

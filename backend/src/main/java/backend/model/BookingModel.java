@@ -68,6 +68,9 @@ public class BookingModel {
     @Column
     private LocalDateTime approvedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String decisionReason;
+
     @Column
     private Integer attendees;
 
@@ -233,6 +236,14 @@ public class BookingModel {
 
     public void setApprovedAt(LocalDateTime approvedAt) {
         this.approvedAt = approvedAt;
+    }
+
+    public String getDecisionReason() {
+        return decisionReason;
+    }
+
+    public void setDecisionReason(String decisionReason) {
+        this.decisionReason = decisionReason;
     }
 
     public Integer getAttendees() {

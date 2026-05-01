@@ -1,35 +1,37 @@
-import axios from "axios";
+import apiClient from './apiClient';
 
-const API = "http://localhost:8080/api/resources";
+const API = '/api/resources';
 
-export const getResources = (type, location, status) => {
-  return axios.get(API, {
-    params: { type, location, status }
+export const getResources = (type, location, status, minCapacity) => {
+  return apiClient.get(API, {
+    params: { type, location, status, minCapacity }
   });
 };
 
 export const getResourceById = (id) => {
-  return axios.get(`${API}/${id}`);
+  return apiClient.get(`${API}/${id}`);
 };
 
 export const createResource = (data) => {
-  return axios.post(API, data);
+  return apiClient.post(API, data);
 };
 
 export const downloadPDF = () => {
-  return axios.get(`${API}/pdf`, {
+  return apiClient.get(`${API}/pdf`, {
     responseType: "blob"
   });
 };
 
 export const updateResource = (id, data) => {
-  return axios.put(`${API}/${id}`, data);
+  return apiClient.put(`${API}/${id}`, data);
 };
 
 export const deleteResource = (id) => {
-  return axios.delete(`${API}/${id}`);
+  return apiClient.delete(`${API}/${id}`);
 };
 
 export const toggleStatus = (id) => {
-  return axios.patch(`${API}/${id}/status`);
+  return apiClient.patch(`${API}/${id}/status`);
 };
+
+

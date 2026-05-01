@@ -1,10 +1,10 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
-const API_BASE_URL = 'http://localhost:8080/api/bookings';
+const API_BASE_URL = '/api/bookings';
 
 const BookingService = {
   createBooking: (bookingData) => {
-    return axios.post(API_BASE_URL, bookingData);
+    return apiClient.post(API_BASE_URL, bookingData);
   },
 
   getAllBookings: (filters = {}) => {
@@ -15,30 +15,27 @@ const BookingService = {
     if (filters.resourceName) params.append('resourceName', filters.resourceName);
 
     const query = params.toString() ? `?${params.toString()}` : '';
-    return axios.get(`${API_BASE_URL}${query}`);
+    return apiClient.get(`${API_BASE_URL}${query}`);
   },
 
   getBookingById: (id) => {
-    return axios.get(`${API_BASE_URL}/${id}`);
+    return apiClient.get(`${API_BASE_URL}/${id}`);
   },
 
   getBookingByBookingId: (bookingId) => {
-    return axios.get(`${API_BASE_URL}/booking/${bookingId}`);
+    return apiClient.get(`${API_BASE_URL}/booking/${bookingId}`);
   },
 
   updateBooking: (id, bookingData) => {
-    return axios.put(`${API_BASE_URL}/${id}`, bookingData);
+    return apiClient.put(`${API_BASE_URL}/${id}`, bookingData);
   },
 
-  updateBookingStatus: (id, status, approvedBy) => {
-    const params = new URLSearchParams();
-    params.append('status', status);
-    if (approvedBy) params.append('approvedBy', approvedBy);
-    return axios.put(`${API_BASE_URL}/${id}/status?${params.toString()}`);
+  updateBookingStatus: (id, payload) => {
+    return apiClient.put(`${API_BASE_URL}/${id}/status`, payload);
   },
 
   deleteBooking: (id) => {
-    return axios.delete(`${API_BASE_URL}/${id}`);
+    return apiClient.delete(`${API_BASE_URL}/${id}`);
   },
 
   checkAvailability: (resourceName, bookingDate, startTime, endTime) => {
@@ -47,7 +44,7 @@ const BookingService = {
     params.append('bookingDate', bookingDate);
     params.append('startTime', startTime);
     params.append('endTime', endTime);
-    return axios.get(`${API_BASE_URL}/check-availability?${params.toString()}`);
+    return apiClient.get(`${API_BASE_URL}/check-availability?${params.toString()}`);
   }
 };
 

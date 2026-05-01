@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getResources, deleteResource, downloadPDF } from "../../services/ResourceService";
 import { Link } from "react-router-dom";
 import "../styles/resource.css";
 import { Pencil, Trash2, FileDown } from "lucide-react";
+import { getCurrentUser } from "../../utils/auth";
 
 function ResourceList() {
+  const currentUser = getCurrentUser();
+  const isAdmin = currentUser?.role === "ADMIN";
 
   const [data, setData] = useState([]);
   const [type, setType] = useState("");
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState("");
+  const [minCapacity, setMinCapacity] = useState("");
+
+  const load = useCallback(() => {
+    getResources(type, location, status, minCapacity)
+      .then(res => setData(res.data))
+      .catch(() => alert("Error loading resources"));
+  }, [type, location, status, minCapacity]);
 
   useEffect(() => {
     load();
-  }, [type, location, status]);
-
-  const load = () => {
-    getResources(type, location, status)
-      .then(res => setData(res.data))
-      .catch(() => alert("Error loading resources"));
-  };
+  }, [load]);
 
   const remove = (id) => {
     if (window.confirm("Are you sure you want to delete this resource?")) {
@@ -36,6 +40,7 @@ function ResourceList() {
     setType("");
     setLocation("");
     setStatus("");
+    setMinCapacity("");
   };
 
   const handleDownload = () => {
@@ -43,10 +48,8 @@ function ResourceList() {
       .then(res => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
-
         link.href = url;
         link.setAttribute("download", "resources.pdf");
-
         document.body.appendChild(link);
         link.click();
       })
@@ -77,15 +80,25 @@ function ResourceList() {
           <option value="OUT_OF_SERVICE">Out of service</option>
         </select>
 
+        <input
+          type="number"
+          min="0"
+          placeholder="Min Capacity"
+          value={minCapacity}
+          onChange={(e) => setMinCapacity(e.target.value)}
+        />
+
         <button className="btn" onClick={resetFilters}>
           Reset
         </button>
       </div>
 
       <div className="top-actions">
-        <Link to="/create-resource">
-          <button className="btn add">+ Add Resource</button>
-        </Link>
+        {isAdmin && (
+          <Link to="/create-resource">
+            <button className="btn add">+ Add Resource</button>
+          </Link>
+        )}
 
         <button className="btn pdf-btn" onClick={handleDownload}>
           <FileDown size={18} /> Download PDF
@@ -105,16 +118,18 @@ function ResourceList() {
               <span className={`status ${r.status === "ACTIVE" ? "active" : "inactive"}`}>
                 {r.status}
               </span>
-              <div className="actions">
-                <Link to={`/edit-resource/${r.id}`}>
-                  <button className="edit">
-                    <Pencil size={16} /> Edit
+              {isAdmin && (
+                <div className="actions">
+                  <Link to={`/edit-resource/${r.id}`}>
+                    <button className="edit">
+                      <Pencil size={16} /> Edit
+                    </button>
+                  </Link>
+                  <button className="delete" onClick={() => remove(r.id)}>
+                    <Trash2 size={16} /> Delete
                   </button>
-                </Link>
-                <button className="delete" onClick={() => remove(r.id)}>
-                  <Trash2 size={16} /> Delete
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           ))
         )}
@@ -124,3 +139,6 @@ function ResourceList() {
 }
 
 export default ResourceList;
+
+
+

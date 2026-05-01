@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { LogIn, ShieldCheck } from 'lucide-react';
+import AuthService from '../../services/AuthService';
 import { signInUser } from '../../utils/auth';
 import '../styles/Auth.css';
 
 function SignIn() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
+  const googleClientIdConfigured = Boolean(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
   const redirectPath = location.state?.from?.pathname || '/home';
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    setError('');
+    try {
+      await AuthService.loginWithGoogle(credentialResponse.credential);
+      navigate(redirectPath, { replace: true });
+    } catch (authError) {
+      setError(authError?.response?.data?.message || 'Google login failed. Please try again.');
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -59,7 +72,7 @@ function SignIn() {
       <div className="auth-panel auth-form-panel">
         <div className="auth-header">
           <h2>Sign In</h2>
-          <p>Use your registered email and password.</p>
+          <p>Use your account or Google OAuth to access Smart Campus.</p>
         </div>
 
         {error && <div className="auth-alert auth-alert-error">{error}</div>}
@@ -92,6 +105,21 @@ function SignIn() {
             Sign In
           </button>
         </form>
+
+        <div className="auth-form" style={{ marginTop: '12px' }}>
+          {!googleClientIdConfigured ? (
+            <div className="auth-alert auth-alert-error">
+              Google OAuth is not configured. Set `REACT_APP_GOOGLE_CLIENT_ID` in
+              `frontend/.env`, then restart the frontend.
+            </div>
+          ) : (
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => setError('Google login was cancelled or failed.')}
+              useOneTap
+            />
+          )}
+        </div>
 
         <p className="auth-switch">
           New here? <Link to="/signup">Create an account</Link>

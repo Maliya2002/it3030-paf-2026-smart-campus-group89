@@ -26,6 +26,17 @@ public interface BookingRepository extends JpaRepository<BookingModel, Long> {
 
     List<BookingModel> findByResourceName(String resourceName);
 
+    List<BookingModel> findByRequestedByContainingIgnoreCase(String requestedBy);
+
+    List<BookingModel> findByRequestedByContainingIgnoreCaseAndStatus(
+            String requestedBy, BookingStatus status);
+
+    List<BookingModel> findByRequestedByContainingIgnoreCaseAndResourceTypeContainingIgnoreCase(
+            String requestedBy, String resourceType);
+
+    List<BookingModel> findByRequestedByContainingIgnoreCaseAndStatusAndResourceTypeContainingIgnoreCase(
+            String requestedBy, BookingStatus status, String resourceType);
+
     @Query("SELECT b FROM BookingModel b WHERE b.resourceName = :resourceName AND b.bookingDate = :bookingDate AND b.status NOT IN ('CANCELLED', 'REJECTED')")
     List<BookingModel> findConflictingBookings(@Param("resourceName") String resourceName, @Param("bookingDate") LocalDate bookingDate);
 

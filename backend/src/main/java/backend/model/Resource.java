@@ -10,21 +10,29 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ✅ Name: required, 2–100 characters
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
 
+    // ✅ Type: required (ROOM / LAB / EQUIPMENT)
     @NotBlank(message = "Type is required")
-    @Pattern(regexp = "ROOM|LAB|EQUIPMENT", message = "Type must be ROOM, LAB, or EQUIPMENT")
+    @Pattern(regexp = "ROOM|LAB|EQUIPMENT", 
+         message = "Type must be ROOM, LAB, or EQUIPMENT")
     private String type;
 
+    // ✅ Location: required
     @NotBlank(message = "Location is required")
     private String location;
 
+    // ✅ Capacity: must be at least 1
     @Min(value = 1, message = "Capacity must be at least 1")
     private int capacity;
 
+    // ✅ Status: default ACTIVE
     private String status = "ACTIVE";
+
+    // 🔹 GETTERS & SETTERS
 
     public Long getId() {
         return id;
