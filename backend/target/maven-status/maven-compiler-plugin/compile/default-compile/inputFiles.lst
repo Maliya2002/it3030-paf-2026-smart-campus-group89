@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\AuthController.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\BookingController.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\NotificationController.java
@@ -75,3 +76,43 @@ C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\FileStorageService.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\NotificationService.java
 C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\TicketService.java
+=======
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\UnauthorizedException.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\config\SecurityConfig.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\AttachmentRepository.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\NotificationService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\NotificationController.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\ResourceNotFoundException.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\AuthController.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\NotificationDTO.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\BadRequestException.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\TicketService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\CustomOAuth2UserService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\CommentRepository.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Attachment.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\BackendApplication.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Ticket.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\JwtAuthenticationFilter.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\AuthRequest.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\AuthService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\NotificationRepository.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Notification.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\NotificationPreferencesDTO.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\AuthResponse.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\OAuth2AuthenticationSuccessHandler.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\CustomUserDetailsService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\GlobalExceptionHandler.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\User.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Comment.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\RegisterRequest.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\UserRepository.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\UserPrincipal.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\JwtTokenProvider.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\TicketRepository.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\FileStorageService.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\CommentRequest.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\OAuth2AuthenticationFailureHandler.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\AdminController.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\TicketController.java
+C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\TicketRequest.java
+>>>>>>> Stashed changes

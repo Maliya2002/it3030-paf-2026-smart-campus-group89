@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,10 +13,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "tickets")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ticket {
 
@@ -30,65 +25,77 @@ public class Ticket {
     private String ticketId;
 
     @NotBlank
-    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private TicketStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private TicketPriority priority;
 
-    @Column(name = "reported_by")
     private String reportedBy;
-
-    @Column(name = "assigned_technician")
     private String assignedTechnician;
-
-    @Column
     private String category;
-
-    @Column
     private String location;
 
     @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
 
-    public enum TicketStatus {
-        OPEN,
-        IN_PROGRESS,
-        ON_HOLD,
-        RESOLVED,
-        CLOSED
-    }
+    // ===== GETTERS & SETTERS =====
+    public Long getId() { return id; }
+    public String getTicketId() { return ticketId; }
+    public void setTicketId(String ticketId) { this.ticketId = ticketId; }
 
-    public enum TicketPriority {
-        LOW,
-        MEDIUM,
-        HIGH,
-        CRITICAL
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public TicketStatus getStatus() { return status; }
+    public void setStatus(TicketStatus status) { this.status = status; }
+
+    public TicketPriority getPriority() { return priority; }
+    public void setPriority(TicketPriority priority) { this.priority = priority; }
+
+    public String getReportedBy() { return reportedBy; }
+    public void setReportedBy(String reportedBy) { this.reportedBy = reportedBy; }
+
+    public String getAssignedTechnician() { return assignedTechnician; }
+    public void setAssignedTechnician(String assignedTechnician) { this.assignedTechnician = assignedTechnician; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+
+    public LocalDateTime getResolvedAt() { return resolvedAt; }
+    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
+
+    public List<Comment> getComments() { return comments; }
+    public List<Attachment> getAttachments() { return attachments; }
+
+    // ENUMS
+    public enum TicketStatus { OPEN, IN_PROGRESS, ON_HOLD, RESOLVED, CLOSED }
+    public enum TicketPriority { LOW, MEDIUM, HIGH, CRITICAL }
 }
+
+
+
