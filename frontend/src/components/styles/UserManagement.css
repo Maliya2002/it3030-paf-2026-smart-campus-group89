@@ -1,0 +1,329 @@
+/* User Management Styles */
+
+.user-management {
+  padding: 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.user-management-header {
+  margin-bottom: 24px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-management-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-management-header .subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.error-message {
+  padding: 12px 16px;
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 4px;
+  color: #c62828;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.user-management-controls {
+  margin-bottom: 20px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn {
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #666;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-btn:hover {
+  background: #efefef;
+  border-color: #bbb;
+}
+
+.filter-btn.active {
+  background: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+.filter-btn .count {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.loading-state {
+  padding: 40px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+  color: #999;
+  font-size: 16px;
+}
+
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+}
+
+.empty-state svg {
+  color: #ddd;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #999;
+  font-size: 16px;
+}
+
+.users-table-wrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.users-table thead {
+  background: #f5f5f5;
+  border-bottom: 2px solid #ddd;
+}
+
+.users-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.users-table tbody tr {
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+
+.users-table tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.users-table td {
+  padding: 12px 16px;
+  color: #333;
+}
+
+.cell-name {
+  font-weight: 500;
+}
+
+.cell-email {
+  font-family: monospace;
+  font-size: 13px;
+  color: #666;
+}
+
+.cell-role {
+  text-align: center;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-badge.role-admin {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+
+.role-badge.role-user {
+  background: #bbdefb;
+  color: #0d47a1;
+}
+
+.role-badge.role-technician {
+  background: #ffe0b2;
+  color: #e65100;
+}
+
+.role-badge.role-manager {
+  background: #f8bbd0;
+  color: #880e4f;
+}
+
+.role-select {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  background: white;
+  color: #333;
+}
+
+.role-select:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.cell-date {
+  font-size: 13px;
+  color: #999;
+}
+
+.cell-actions {
+  text-align: right;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.action-buttons button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-edit {
+  background: #e3f2fd;
+  color: #0066cc;
+}
+
+.btn-edit:hover {
+  background: #bbdefb;
+  color: #0052a3;
+}
+
+.btn-delete {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.btn-delete:hover {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
+
+.btn-save {
+  background: #4caf50;
+  color: white;
+  padding: 8px 12px;
+}
+
+.btn-save:hover {
+  background: #45a049;
+}
+
+.btn-cancel {
+  background: #999;
+  color: white;
+  padding: 8px 12px;
+}
+
+.btn-cancel:hover {
+  background: #777;
+}
+
+.user-row.role-admin {
+  border-left: 3px solid #4caf50;
+}
+
+.user-row.role-technician {
+  border-left: 3px solid #ff9800;
+}
+
+.user-row.role-manager {
+  border-left: 3px solid #e91e63;
+}
+
+.user-row.role-user {
+  border-left: 3px solid #2196f3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-management {
+    padding: 12px;
+  }
+
+  .user-management-header {
+    padding: 16px;
+  }
+
+  .user-management-header h2 {
+    font-size: 22px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 8px 12px;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+  }
+
+  .filter-btn {
+    width: 100%;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
