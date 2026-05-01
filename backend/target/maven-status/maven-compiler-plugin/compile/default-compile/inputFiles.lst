@@ -1,45 +1,77 @@
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\BackendApplication.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\AuthController.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\BookingController.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\NotificationController.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\ResourceController.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\TicketController.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\AuthResponse.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\BookingDecisionRequest.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\GoogleAuthRequest.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\ResourceDTO.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundAdvice.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\AttachmentNotFoundException.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\CommentNotFoundAdvice.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\CommentNotFoundException.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\ResourceNotFoundException.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\TicketNotFoundAdvice.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\TicketNotFoundException.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\AttachmentModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingStatus.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\CommentModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\NotificationModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\NotificationType.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\Resource.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketPriority.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketStatus.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\UserModel.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\UserRole.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\AttachmentRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\BookingRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\CommentRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\NotificationRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\ResourceRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\TicketRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\UserRepository.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\JwtAuthFilter.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\JwtService.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\SecurityConfig.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\SecurityUtils.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\GoogleTokenVerifierService.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\impl\ResourceServiceImpl.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\NotificationService.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\PdfService.java
-C:\Users\ASUS Vivobook\Desktop\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\ResourceService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\AuthController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\BookingController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\NotificationController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\ResourceController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\TicketController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\controller\UserController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\AuthResponse.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\BookingDecisionRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\CreateNotificationRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\GoogleAuthRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\NotificationDTO.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\ResourceDTO.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\UpdateUserRoleRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\dto\UserDTO.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\exception\ResourceNotFoundException.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\AttachmentModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\BookingStatus.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\CommentModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\NotificationModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\NotificationType.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\Resource.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\TicketModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\UserModel.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\model\UserRole.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\BookingRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\NotificationRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\ResourceRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\repository\UserRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\JwtAuthFilter.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\JwtService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\SecurityConfig.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\security\SecurityUtils.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\GoogleTokenVerifierService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\impl\ResourceServiceImpl.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\NotificationService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\PdfService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\ResourceService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\backend\service\UserService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\BackendApplication.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\config\SecurityConfig.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\AdminController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\AuthController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\NotificationController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\controller\TicketController.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\AuthRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\AuthResponse.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\CommentRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\NotificationDTO.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\NotificationPreferencesDTO.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\RegisterRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\dto\TicketRequest.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\BadRequestException.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\GlobalExceptionHandler.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\ResourceNotFoundException.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\exception\UnauthorizedException.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Attachment.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Comment.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Notification.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\Ticket.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\model\User.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\AttachmentRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\CommentRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\NotificationRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\TicketRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\repository\UserRepository.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\CustomOAuth2UserService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\CustomUserDetailsService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\JwtAuthenticationFilter.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\JwtTokenProvider.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\OAuth2AuthenticationFailureHandler.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\OAuth2AuthenticationSuccessHandler.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\security\UserPrincipal.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\AuthService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\FileStorageService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\NotificationService.java
+C:\Users\MalithPC\OneDrive\Documents\it23835382\it3030-paf-2026-smart-campus-group89\backend\src\main\java\com\smartcampus\service\TicketService.java
